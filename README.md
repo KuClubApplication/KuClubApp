@@ -1,5 +1,5 @@
-- 업데이트 해주신 코드 틈틈이 pull 하면서 작업하려고 하니, 에러나는 상태에서 push 하지 말아주세요! 
-
+- 업데이트 해주신 코드 틈틈이 pull 하면서 작업하려고 하니, 에러나는 상태에서 push 하지 말아주세요!
+---
 - 연결 구조: User(data class) - UserDao - UserRepository - NavUserViewModel - MainScreen(LoginScreen, RegisterScreen, ClubListScreen, SettingScreen이 속함)
 - 스크린 추가 시 코드 추가해야 하는 파일: NavRoutes, MainScreen의 NavHost 부분
   
