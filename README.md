@@ -8,10 +8,10 @@
 - retrofitclass.kt & apiinterface.kt : express 서버와 통신하기 위한 네트워크 연결 및 API 인터페이스.
 - datastore.kt : 자동로그인 체크 여부와 JWT를 로컬 Datastore에 저장 
 - GMailSender : SMTP 프로토콜로 인증번호 메일 전송
-- kuclubServer.js : express 프레임워크, firebase-auth 사용하여 토큰(JWT) 생성 및 검증, 주로 POST 요청 처리.
 - AndroidManifest.xml : android:usesCleartextTraffic="true" 이나 퍼미션 중요
 - res > drawable : 사진 및 아이콘
 
+- kuclubServer.js : express 프레임워크, firebase-auth 사용하여 토큰(JWT) 생성 및 검증, 주로 POST 요청 처리.
 - 토큰 생성 및 검증 서버
   - AWS EC2에서 pm2로 실행
   - 서버 URL 및 엔드포인트
