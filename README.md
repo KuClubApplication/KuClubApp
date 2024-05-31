@@ -16,5 +16,5 @@
   - AWS EC2에서 pm2로 실행
   - 서버 URL 및 엔드포인트
     - http://3.34.14.100:5000/login
-    - http://3.34.14.100:5000/verify Token
+    - http://3.34.14.100:5000/verifyToken
     - http://3.34.14.100:5000/sendIdToken
