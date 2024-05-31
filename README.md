@@ -12,4 +12,4 @@
 
 - 토큰 생성 및 검증 서버 (AWS EC2에서 실행)
   - 서버 URL: http://3.34.14.100:5000
-  - 서버 엔드포인트 : /login, /verify Token, 
+  - 서버 엔드포인트: /login, /verify Token, /sendIdToken
