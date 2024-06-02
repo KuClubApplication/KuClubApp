@@ -84,4 +84,7 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+
+    // BottomNavigationItem
+    implementation("androidx.compose.material:material:1.7.0-beta02")
 }
