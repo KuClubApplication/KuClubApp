@@ -1,4 +1,6 @@
-@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class)
+@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class,
+    ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class
+)
 
 package com.example.kuclubapp.screens
 
@@ -23,8 +25,10 @@ import com.example.kuclubapp.viewmodel.NavUserViewModel
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
@@ -92,23 +96,35 @@ fun MainScreen(
 
 @Composable
 fun TopBar(navController: NavHostController) {
+    var currentRoute by remember { mutableStateOf(navController.currentBackStackEntry?.destination?.route) }
+
+    LaunchedEffect(navController) {
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            currentRoute = destination.route
+        }
+    }
+
     TopAppBar(
         title = {
-            Text(
-                text = when (navController.currentBackStackEntry?.destination?.route) {
-                    NavRoutes.ClubList.route -> "Club List"
-                    NavRoutes.Register.route -> "Register"
-                    NavRoutes.Setting.route -> "Settings"
-                    else -> "App"
-                },
-                fontSize = 20.sp,
-                modifier = Modifier.fillMaxWidth(),
-                textAlign = TextAlign.Center
-            )
+            Box(modifier = Modifier.fillMaxWidth()) {
+                Text(
+                    text = when (currentRoute) {
+                        NavRoutes.ClubList.route -> "Club List"
+                        NavRoutes.Register.route -> "Register"
+                        NavRoutes.Setting.route -> "Settings"
+                        else -> "App"
+                    },
+                    fontSize = 20.sp,
+                    modifier = Modifier.align(Alignment.Center),
+                    textAlign = TextAlign.Center
+                )
+            }
         },
         navigationIcon = {
-            IconButton(onClick = { navController.popBackStack() }) {
-                Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back")
+            if (currentRoute != NavRoutes.Login.route) {
+                IconButton(onClick = { navController.popBackStack() }) {
+                    Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                }
             }
         },
         actions = {
@@ -116,7 +132,7 @@ fun TopBar(navController: NavHostController) {
                 Icon(imageVector = Icons.Default.Notifications, contentDescription = "Notifications")
             }
         },
-        colors = TopAppBarDefaults.smallTopAppBarColors(
+        colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MaterialTheme.colorScheme.primary,
             titleContentColor = androidx.compose.ui.graphics.Color.White
         )
