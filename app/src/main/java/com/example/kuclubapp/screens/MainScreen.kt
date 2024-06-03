@@ -4,36 +4,47 @@
 
 package com.example.kuclubapp.screens
 
-import android.graphics.Color
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material.BottomNavigation
+import androidx.compose.material.BottomNavigationItem
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.kuclubapp.NavRoutes
-import com.example.kuclubapp.viewmodel.NavUserViewModel
-import androidx.compose.material.BottomNavigation
-import androidx.compose.material.BottomNavigationItem
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.sp
 import com.example.kuclubapp.R
+import com.example.kuclubapp.viewmodel.NavUserViewModel
 
 @Composable
 fun rememberViewModelStoreOwner(): ViewModelStoreOwner {
@@ -91,6 +102,12 @@ fun MainScreen(
                     }
                     composable(NavRoutes.Setting.route) {
                         SettingScreen(navController, navUserViewModel)
+                    }
+                    composable(NavRoutes.Category.route) {
+                        CategoryScreen(navController, navUserViewModel)
+                    }
+                    composable(NavRoutes.Mypage.route) {
+                        MypageScreen(navController, navUserViewModel)
                     }
                 }
             }
@@ -170,27 +187,27 @@ fun BottomNavigationBar(navController: NavHostController) {
         )
         BottomNavigationItem(
             icon = {
-                val iconRes = if (selectedItem == NavRoutes.Register.route) {
+                val iconRes = if (selectedItem == NavRoutes.Category.route) {
                     R.drawable.clue_checked
                 } else {
                     R.drawable.clue_unchecked
                 }
                 Image(painter = painterResource(id = iconRes), contentDescription = "Register", modifier = Modifier.size(24.dp))
             },
-            selected = selectedItem == NavRoutes.Register.route,
-            onClick = { navController.navigate(NavRoutes.Register.route) }
+            selected = selectedItem == NavRoutes.Category.route,
+            onClick = { navController.navigate(NavRoutes.Category.route) }
         )
         BottomNavigationItem(
             icon = {
-                val iconRes = if (selectedItem == NavRoutes.Setting.route) {
+                val iconRes = if (selectedItem == NavRoutes.Mypage.route) {
                     R.drawable.mypage_checked
                 } else {
                     R.drawable.mypage_unchecked
                 }
                 Image(painter = painterResource(id = iconRes), contentDescription = "Setting", modifier = Modifier.size(24.dp))
             },
-            selected = selectedItem == NavRoutes.Setting.route,
-            onClick = { navController.navigate(NavRoutes.Setting.route) }
+            selected = selectedItem == NavRoutes.Mypage.route,
+            onClick = { navController.navigate(NavRoutes.Mypage.route) }
         )
         BottomNavigationItem(
             icon = {
