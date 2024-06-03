@@ -5,11 +5,9 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 
-//class UserDao (private val tab: CollectionReference) {
 class UserDao (private val firebaseDB: FirebaseDatabase) {
 
     suspend fun insertUser(user: User){
-//        collection.add(user).await()
         var table = firebaseDB.getReference("KuclubDB/User")
         var userInfo = table.child(user.userId.split("@")[0])
         userInfo.child("userId").setValue(user.userId)
@@ -19,20 +17,7 @@ class UserDao (private val firebaseDB: FirebaseDatabase) {
     }
 
     suspend fun getValidUser(id: String, passwd: String, onResult: (Boolean) -> Unit){
-//        collection
-//            .whereEqualTo("userId", id)
-//            .whereEqualTo("userPasswd", passwd)
-//            .get()
-//            .addOnSuccessListener { querySnapshot ->
-//                if (!querySnapshot.isEmpty) {
-//                    onResult(true)
-//                } else {
-//                    onResult(false)
-//                }
-//            }
-//            .addOnFailureListener { e ->
-//                onResult(false)
-//            }
+
         var table = firebaseDB.getReference("KuclubDB/User")
         val userQuery = table.orderByChild("userId").equalTo(id)
         userQuery.addListenerForSingleValueEvent(object : ValueEventListener {

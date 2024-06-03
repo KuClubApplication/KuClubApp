@@ -4,11 +4,7 @@ import com.example.kuclubapp.firebaseDB.User
 import com.example.kuclubapp.firebaseDB.UserDao
 import com.google.firebase.database.FirebaseDatabase
 
-//class UserRepository(private val firestore: FirebaseFirestore) {
 class UserRepository(private val firebaseDB: FirebaseDatabase) {
-
-//    private val collection = firestore.collection("users")
-//    private val userDao = UserDao(collection)
 
     private val userDao = UserDao(firebaseDB)
 

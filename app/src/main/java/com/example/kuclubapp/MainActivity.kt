@@ -17,7 +17,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
 import com.example.kuclubapp.screens.MainScreen
+import com.example.kuclubapp.viewmodel.NavNoticeViewModel
 import com.example.kuclubapp.viewmodel.NavUserViewModel
+import com.example.kuclubapp.viewmodel.NoticeRepository
+import com.example.kuclubapp.viewmodel.NoticeViewModelFactory
 import com.example.kuclubapp.viewmodel.UserRepository
 import com.example.kuclubapp.viewmodel.UserViewModelFactory
 import com.google.firebase.auth.FirebaseAuth
@@ -42,6 +45,9 @@ class MainActivity : ComponentActivity() {
 
             val viewModel: NavUserViewModel =
                 viewModel(factory = UserViewModelFactory(UserRepository(db)))
+            val noticeViewModel: NavNoticeViewModel =
+                viewModel(factory = NoticeViewModelFactory(NoticeRepository(db)))
+
             val navController = rememberNavController()
 
             var startDestination by remember { mutableStateOf(NavRoutes.Login.route) }
@@ -71,6 +77,7 @@ class MainActivity : ComponentActivity() {
             MainScreen(
                 navController = navController,
                 navUserViewModel = viewModel,
+                navNoticeViewModel = noticeViewModel,
                 startDestination = startDestination,
                 onLoginSuccess = { token ->
                     lifecycleScope.launch {

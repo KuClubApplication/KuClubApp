@@ -45,6 +45,8 @@ fun TopBar(navController: NavHostController) {
                         NavRoutes.Category.route -> "카테고리 분류"
                         NavRoutes.Mypage.route -> "마이 페이지"
                         NavRoutes.Setting.route -> "설정"
+                        NavRoutes.Contact.route -> "고객 문의"
+                        NavRoutes.NoticeList.route -> "공지사항"
                         else -> "App"
                     },
                     fontSize = 20.sp,
