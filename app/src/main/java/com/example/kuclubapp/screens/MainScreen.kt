@@ -2,11 +2,8 @@ package com.example.kuclubapp.screens
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
@@ -44,17 +41,12 @@ fun MainScreen(navController: NavHostController, navUserViewModel: NavUserViewMo
 
         Scaffold(
             topBar = {
-                if(navUserViewModel.loginStatus.value)
-                    TopAppBar(
-                        title = { Text(text = "테스트용 탑바") }
-                    )
+//                if(navUserViewModel.loginStatus.value)
+                    TopBar(navController)
             },
             bottomBar = {
-                if(navUserViewModel.loginStatus.value)
-                    BottomAppBar(
-                    ){
-                        Text(text = "테스트용 버텀바")
-                    }
+//                if(navUserViewModel.loginStatus.value)
+                    BottomNavigationBar(navController)
             }
         ) { contentPadding ->
 
@@ -77,6 +69,14 @@ fun MainScreen(navController: NavHostController, navUserViewModel: NavUserViewMo
 
                     composable(NavRoutes.Setting.route) {
                         SettingScreen(navController, navUserViewModel)
+                    }
+
+                    composable(NavRoutes.Category.route) {
+                        CategoryScreen(navController, navUserViewModel)
+                    }
+
+                    composable(NavRoutes.Mypage.route) {
+                        MypageScreen(navController, navUserViewModel)
                     }
                 }
             }

@@ -20,9 +20,9 @@ import com.example.kuclubapp.screens.MainScreen
 import com.example.kuclubapp.viewmodel.NavUserViewModel
 import com.example.kuclubapp.viewmodel.UserRepository
 import com.example.kuclubapp.viewmodel.UserViewModelFactory
-import com.example.myauth2.RetrofitClient
-import com.example.myauth2.VerifyTokenRequest
-import com.example.myauth2.VerifyTokenResponse
+import com.example.kuclubapp.RetrofitClient
+import com.example.kuclubapp.VerifyTokenRequest
+import com.example.kuclubapp.VerifyTokenResponse
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase

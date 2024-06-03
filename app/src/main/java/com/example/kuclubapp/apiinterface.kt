@@ -1,4 +1,4 @@
-package com.example.myauth2
+package com.example.kuclubapp
 
 import retrofit2.Call
 import retrofit2.http.Body

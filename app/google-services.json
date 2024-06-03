@@ -8,6 +8,25 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:469438398828:android:f56f6a48d097e56a857349",
+        "android_client_info": {
+          "package_name": "com.example.AppKuClub"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDrLiRQbQluaHjadDuSGefm1Vr46ml4NOE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:469438398828:android:370cc226315de391857349",
         "android_client_info": {
           "package_name": "com.example.kuclubapp"

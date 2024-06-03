@@ -52,11 +52,11 @@ import com.example.kuclubapp.DataStoreManager
 import com.example.kuclubapp.NavRoutes
 import com.example.kuclubapp.R
 import com.example.kuclubapp.viewmodel.NavUserViewModel
-import com.example.myauth2.IdTokenRequest
-import com.example.myauth2.LoginRequest
-import com.example.myauth2.RetrofitClient
-import com.example.myauth2.ServerResponse
-import com.example.myauth2.TokenResponse
+import com.example.kuclubapp.IdTokenRequest
+import com.example.kuclubapp.LoginRequest
+import com.example.kuclubapp.RetrofitClient
+import com.example.kuclubapp.ServerResponse
+import com.example.kuclubapp.TokenResponse
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.flow.first
 import retrofit2.Call
