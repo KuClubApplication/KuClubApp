@@ -41,11 +41,11 @@ fun MainScreen(navController: NavHostController, navUserViewModel: NavUserViewMo
 
         Scaffold(
             topBar = {
-//                if(navUserViewModel.loginStatus.value)
+                if(navUserViewModel.loginStatus.value)
                     TopBar(navController)
             },
             bottomBar = {
-//                if(navUserViewModel.loginStatus.value)
+                if(navUserViewModel.loginStatus.value)
                     BottomNavigationBar(navController)
             }
         ) { contentPadding ->

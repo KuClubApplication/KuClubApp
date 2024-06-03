@@ -20,9 +20,6 @@ import com.example.kuclubapp.screens.MainScreen
 import com.example.kuclubapp.viewmodel.NavUserViewModel
 import com.example.kuclubapp.viewmodel.UserRepository
 import com.example.kuclubapp.viewmodel.UserViewModelFactory
-import com.example.kuclubapp.RetrofitClient
-import com.example.kuclubapp.VerifyTokenRequest
-import com.example.kuclubapp.VerifyTokenResponse
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
@@ -56,8 +53,10 @@ class MainActivity : ComponentActivity() {
                         if (isValid) {
                             val userId = getUserIdFromToken(token)
                             viewModel.setUserInfo(userId)
+                            viewModel.loginStatus.value = true
                             startDestination = NavRoutes.ClubList.route
                         } else {
+                            viewModel.loginStatus.value = false
                             startDestination = NavRoutes.Login.route
                         }
                         navController.navigate(startDestination) {
@@ -79,6 +78,7 @@ class MainActivity : ComponentActivity() {
                         if (autoLoginFlow.value == true) {
                             DataStoreManager.saveToken(context, token)
                         }
+                        viewModel.loginStatus.value = true
                         navController.navigate(NavRoutes.ClubList.route) {
                             popUpTo(NavRoutes.Login.route) { inclusive = true }
                         }

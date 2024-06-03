@@ -39,6 +39,7 @@ fun SettingScreen(navController: NavController, navUserViewModel: NavUserViewMod
             onClick = {
                 navUserViewModel.viewModelScope.launch {
                     navUserViewModel.deleteToken(context)
+                    navUserViewModel.loginStatus.value = false
                     navController.navigate(NavRoutes.Login.route)
                 }
             },

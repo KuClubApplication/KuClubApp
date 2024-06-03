@@ -41,10 +41,10 @@ fun TopBar(navController: NavHostController) {
             Box(modifier = Modifier.fillMaxWidth()) {
                 Text(
                     text = when (currentRoute) {
-                        NavRoutes.ClubList.route -> "Club List"
-                        NavRoutes.Category.route -> "Category"
-                        NavRoutes.Mypage.route -> "Mypage"
-                        NavRoutes.Setting.route -> "Settings"
+                        NavRoutes.ClubList.route -> "KU 동아리앱"
+                        NavRoutes.Category.route -> "카테고리 분류"
+                        NavRoutes.Mypage.route -> "마이 페이지"
+                        NavRoutes.Setting.route -> "설정"
                         else -> "App"
                     },
                     fontSize = 20.sp,
