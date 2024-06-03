@@ -31,7 +31,7 @@ fun CategoryScreen(navController: NavHostController, navUserViewModel: NavUserVi
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text("동아리 카테고리 페이지", fontSize = 40.sp)
+        Text("카테고리 페이지", fontSize = 40.sp)
         Text("유저 아이디: " + navUserViewModel.userId, fontSize = 20.sp)
         Button(
             onClick = { navController.navigate(NavRoutes.Setting.route) },
