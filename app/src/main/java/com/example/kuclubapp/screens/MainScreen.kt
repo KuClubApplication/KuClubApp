@@ -61,13 +61,17 @@ fun MainScreen(
     ) {
         Scaffold(
             topBar = {
-                if (navController.currentBackStackEntry?.destination?.route != NavRoutes.Login.route) {
-                    TopBar(navController)
+                if (navController.currentBackStackEntry?.destination?.route == NavRoutes.Register.route
+                    || navController.currentBackStackEntry?.destination?.route == NavRoutes.ClubList.route
+                    || navController.currentBackStackEntry?.destination?.route == NavRoutes.Setting.route) {
+                    TopBar(navController = navController)
                 }
             },
             bottomBar = {
-                if (navController.currentBackStackEntry?.destination?.route != NavRoutes.Login.route) {
-                    BottomNavigationBar(navController)
+                if (navController.currentBackStackEntry?.destination?.route == NavRoutes.Register.route
+                    || navController.currentBackStackEntry?.destination?.route == NavRoutes.ClubList.route
+                    || navController.currentBackStackEntry?.destination?.route == NavRoutes.Setting.route) {
+                    BottomNavigationBar(navController = navController)
                 }
             }
         ) { contentPadding ->
