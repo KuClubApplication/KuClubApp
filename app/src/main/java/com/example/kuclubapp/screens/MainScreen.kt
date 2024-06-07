@@ -99,6 +99,10 @@ fun MainScreen(navController: NavHostController, navUserViewModel: NavUserViewMo
                         NoticeDetailScreen(noticeNum, navController, navUserViewModel, navNoticeViewModel)
                     }
 
+                    composable(NavRoutes.Alarm.route) {
+                        AlarmScreen(navController, navUserViewModel)
+                    }
+
                 }
             }
 

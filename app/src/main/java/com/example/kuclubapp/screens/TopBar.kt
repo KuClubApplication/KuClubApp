@@ -48,6 +48,7 @@ fun TopBar(navController: NavHostController) {
                         NavRoutes.Contact.route -> "고객 문의"
                         NavRoutes.NoticeList.route -> "공지사항"
                         NavRoutes.NoticeDetail.route -> "상세 공지사항"
+                        NavRoutes.Alarm.route -> "알림"
                         else -> "App"
                     },
                     fontSize = 20.sp,
@@ -63,7 +64,7 @@ fun TopBar(navController: NavHostController) {
             }
         },
         actions = {
-            IconButton(onClick = { /* 알림 버튼 클릭 처리 */ }) {
+            IconButton(onClick = { navController.navigate(NavRoutes.Alarm.route) }) {
                 Icon(imageVector = Icons.Default.Notifications, contentDescription = "Notifications")
             }
         },

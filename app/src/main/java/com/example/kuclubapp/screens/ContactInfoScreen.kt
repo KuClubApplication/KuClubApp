@@ -30,8 +30,6 @@ fun ContactInfoScreen(controller: NavHostController, navUserViewModel: NavUserVi
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        ContactInfoItem("학교 위치", "건국대학교, 서울특별시 광진구 능동로 120")
-        Spacer(modifier = Modifier.height(16.dp))
         ContactInfoItem("공식 이메일 주소", "kuclub3official@gmail.com")
         Spacer(modifier = Modifier.height(16.dp))
         DeveloperCallInfo()
