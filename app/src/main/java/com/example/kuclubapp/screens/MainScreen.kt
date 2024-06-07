@@ -12,8 +12,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import com.example.kuclubapp.NavRoutes
 import com.example.kuclubapp.viewmodel.NavNoticeViewModel
 import com.example.kuclubapp.viewmodel.NavUserViewModel
@@ -89,8 +91,12 @@ fun MainScreen(navController: NavHostController, navUserViewModel: NavUserViewMo
                         NoticeListScreen(navController, navUserViewModel, navNoticeViewModel)
                     }
 
-                    composable(NavRoutes.NoticeDetail.route) {
-                        NoticeDetailScreen(navController, navUserViewModel, navNoticeViewModel)
+                    composable(
+                        route = "NoticeDetail/{noticeNum}",
+                        arguments = listOf(navArgument("noticeNum") { type = NavType.IntType })
+                    ) { backStackEntry ->
+                        val noticeNum = backStackEntry.arguments?.getInt("noticeNum")
+                        NoticeDetailScreen(noticeNum, navController, navUserViewModel, navNoticeViewModel)
                     }
 
                 }

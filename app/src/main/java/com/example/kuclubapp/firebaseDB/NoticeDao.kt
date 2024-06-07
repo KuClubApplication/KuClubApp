@@ -24,4 +24,19 @@ class NoticeDao(private val firebaseDB: FirebaseDatabase) {
             }
         })
     }
+
+    suspend fun getNoticeDetail(noticeNum: Int, onResult: (Notice?) -> Unit) {
+        val table = firebaseDB.getReference("KuclubDB/Notice")
+        table.orderByChild("noticeNum").equalTo(noticeNum.toDouble())
+            .addListenerForSingleValueEvent(object: ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    val notice = dataSnapshot.children.firstOrNull()?.getValue(Notice::class.java)
+                    onResult(notice)
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    onResult(null)
+                }
+        })
+    }
 }

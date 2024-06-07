@@ -42,7 +42,7 @@ fun NoticeListScreen(navController: NavHostController, navUserViewModel: NavUser
     ) {
         itemsIndexed(notices) { index, notice ->
             NoticeListItem(notice = notice, onClick = {
-                navController.navigate("NoticeDetail")
+                navController.navigate("NoticeDetail/${notice.noticeNum}")
             })
         }
     }

@@ -21,10 +21,21 @@ class NavNoticeViewModel(private val repository: NoticeRepository): ViewModel() 
     private val _notices = MutableLiveData<List<Notice>>()
     val notices: LiveData<List<Notice>> = _notices
 
+    private val _noticeDetail = MutableLiveData<Notice?>()
+    val noticeDetail: LiveData<Notice?> = _noticeDetail
+
     fun getAllNotices() {
         viewModelScope.launch {
             repository.getAllNotices { notices ->
                 _notices.value = notices
+            }
+        }
+    }
+
+    fun getNoticeDetail(noticeNum: Int) {
+        viewModelScope.launch {
+            repository.getNoticeDetail(noticeNum) { notice ->
+                _noticeDetail.value = notice
             }
         }
     }

@@ -10,6 +10,6 @@ sealed class NavRoutes(val route: String) {
     object Mypage : NavRoutes("Mypage")
     object Contact : NavRoutes("Contact")
     object NoticeList : NavRoutes("NoticeList")
-    object NoticeDetail : NavRoutes("NoticeDetail")
+    object NoticeDetail : NavRoutes("NoticeDetail/{noticeNum}")
 
 }

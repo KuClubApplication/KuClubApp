@@ -11,4 +11,8 @@ class NoticeRepository(private val firebaseDB: FirebaseDatabase) {
     suspend fun getAllNotices(onResult: (List<Notice>) -> Unit) {
         noticeDao.getAllNotices(onResult)
     }
+
+    suspend fun getNoticeDetail(noticeNum: Int, onResult: (Notice?) -> Unit) {
+        noticeDao.getNoticeDetail(noticeNum, onResult)
+    }
 }
