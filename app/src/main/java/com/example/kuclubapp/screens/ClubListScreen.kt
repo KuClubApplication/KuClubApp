@@ -50,6 +50,7 @@ fun TestScreen(){
 @Composable
 fun ClubListScreen() {
 
+    
     val context = LocalContext.current
 
     Column (
