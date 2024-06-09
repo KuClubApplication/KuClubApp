@@ -1,11 +1,22 @@
 package com.example.kuclubapp.screens
 
+import android.annotation.SuppressLint
+import android.app.PendingIntent
+import android.app.TaskStackBuilder
+import android.content.ActivityNotFoundException
+import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -23,15 +34,20 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.content.ContextCompat.startActivity
+import androidx.navigation.NavHostController
+import com.example.kuclubapp.NavRoutes
 import com.example.kuclubapp.data.ClubDetails
 import com.example.kuclubapp.R
 import java.lang.reflect.Member
 
 @Composable
-fun ClubDetailScreen() {
+fun ClubDetailScreen(navController: NavHostController) {
     //추후에는 인자로 객체 전달 받기로 수정
     val clubDetails = ClubDetails(
         name = "GDSC Konkuk",
@@ -85,7 +101,7 @@ fun ClubDetailScreen() {
         }
 
         item {
-            ClubInfoSection(clubDetails)
+            ClubInfoSection(clubDetails,navController)
         }
 
         item {
@@ -102,8 +118,10 @@ fun ClubDetailScreen() {
     }
 }
 
+
 @Composable
-fun ClubInfoSection(clubDetails: ClubDetails) {
+fun ClubInfoSection(clubDetails: ClubDetails,navController: NavHostController) {
+    val context = LocalContext.current
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -134,7 +152,10 @@ fun ClubInfoSection(clubDetails: ClubDetails) {
                 modifier = Modifier
                     .size(32.dp)
                     .padding(top = 8.dp)
-                    .align(Alignment.CenterVertically)
+                    .align(Alignment.CenterVertically).
+                    clickable {
+                        navController.navigate(NavRoutes.webView.route)
+                    }
             )
             Icon(
                 painter = painterResource(id = R.drawable.icon_everytime),
