@@ -1,8 +1,9 @@
 - 업데이트 해주신 코드 틈틈이 pull 하면서 작업하려고 하니, 에러나는 상태에서 push 하지 말아주세요!
 ---
 ### 주요 구조
-- 연결 구조: User(data class) - UserDao - UserRepository - NavUserViewModel - MainScreen(LoginScreen, RegisterScreen, ClubListScreen, SettingScreen이 속함)
-- 스크린 추가 시 코드 추가해야 하는 파일: NavRoutes, MainScreen의 NavHost 부분
+- 연결 구조: User(data class) - UserDao - UserRepository - NavUserViewModel - MainScreen(LoginScreen, RegisterScreen, ClubListScreen, SettingScreen, CategoryScreen, MypageScreen이 속함)
+- 스크린 추가 시 코드 추가해야 하는 파일: NavRoutes 클래스, MainScreen.kt의 NavHost 부분, Topbar.kt의 'Route -> {특정 문자열}' 부분, MainActivity에 있는 MainScreen의 인자 (컨플릭트 어떻게 하지..)
+  - Screen의 인자로 줘야 하는 것: navHostController, navUserViewModel, 특정 스크린의 ViewModel (ex. navNoticeViewModel)
 ---  
 ### 기타 코드 설명
 - MainActivity : 자동로그인 여부 및 JWT 유무에 따라 진입점 다르게 설정.

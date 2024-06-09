@@ -17,12 +17,12 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
 import com.example.kuclubapp.screens.MainScreen
+import com.example.kuclubapp.viewmodel.NavNoticeViewModel
 import com.example.kuclubapp.viewmodel.NavUserViewModel
+import com.example.kuclubapp.viewmodel.NoticeRepository
+import com.example.kuclubapp.viewmodel.NoticeViewModelFactory
 import com.example.kuclubapp.viewmodel.UserRepository
 import com.example.kuclubapp.viewmodel.UserViewModelFactory
-import com.example.myauth2.RetrofitClient
-import com.example.myauth2.VerifyTokenRequest
-import com.example.myauth2.VerifyTokenResponse
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
@@ -45,6 +45,9 @@ class MainActivity : ComponentActivity() {
 
             val viewModel: NavUserViewModel =
                 viewModel(factory = UserViewModelFactory(UserRepository(db)))
+            val noticeViewModel: NavNoticeViewModel =
+                viewModel(factory = NoticeViewModelFactory(NoticeRepository(db)))
+
             val navController = rememberNavController()
 
             var startDestination by remember { mutableStateOf(NavRoutes.Login.route) }
@@ -56,8 +59,10 @@ class MainActivity : ComponentActivity() {
                         if (isValid) {
                             val userId = getUserIdFromToken(token)
                             viewModel.setUserInfo(userId)
+                            viewModel.loginStatus.value = true
                             startDestination = NavRoutes.ClubList.route
                         } else {
+                            viewModel.loginStatus.value = false
                             startDestination = NavRoutes.Login.route
                         }
                         navController.navigate(startDestination) {
@@ -72,6 +77,7 @@ class MainActivity : ComponentActivity() {
             MainScreen(
                 navController = navController,
                 navUserViewModel = viewModel,
+                navNoticeViewModel = noticeViewModel,
                 startDestination = startDestination,
                 onLoginSuccess = { token ->
                     lifecycleScope.launch {
@@ -79,6 +85,7 @@ class MainActivity : ComponentActivity() {
                         if (autoLoginFlow.value == true) {
                             DataStoreManager.saveToken(context, token)
                         }
+                        viewModel.loginStatus.value = true
                         navController.navigate(NavRoutes.ClubList.route) {
                             popUpTo(NavRoutes.Login.route) { inclusive = true }
                         }

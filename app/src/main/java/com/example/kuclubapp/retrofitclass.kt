@@ -1,4 +1,4 @@
-package com.example.myauth2
+package com.example.kuclubapp
 
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
