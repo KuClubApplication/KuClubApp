@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -27,6 +28,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.kuclubapp.data.ClubDetails
 import com.example.kuclubapp.R
+import java.lang.reflect.Member
+
 @Composable
 fun ClubDetailScreen() {
     //추후에는 인자로 객체 전달 받기로 수정
@@ -37,24 +40,22 @@ fun ClubDetailScreen() {
         type = "단과 동아리",
         president = "이현우",
         contact = "010-xxxx-xxxx",
-        foundingDate = "설립일",
+        foundingDate = "2023-xx-xx",
         instagram = "Instagram",
-        introduction = "GDSC(Google Developer Student Clubs)는 ...",
+        introduction = "GDSC(Google Developer Student Clubs)는 ...GDSC(Google Developer Student Clubs)는 ...GDSC(Google Developer Student Clubs)는 ...GDSC(Google Developer Student Clubs)는 ...GDSC(Google Developer Student Clubs)는 ...GDSC(Google Developer Student Clubs)는 ...",
         activities = listOf("정기 모임", "신입생 프로젝트", "Google Solution Challenge", "학술 공유회"),
-        recruitment = listOf(
-            "GDSC Konkuk Core Member 지원 자격",
-            "1. 공대생이어야 함",
-            "2. GDSC 활동에 적극적으로 참여할 수 있는 사람",
-            "GDSC Konkuk 모집 분야",
-            "- Developer Relations",
-            "- UX/UI Designer",
-            "- Android",
-            "- iOS",
-            "- Flutter",
-            "- Backend",
-            "- Web Frontend",
+        recruitment = " GDSC Konkuk Core Member 지원 자격\n"+
+            "1. 공대생이어야 함\n"+
+            "2. GDSC 활동에 적극적으로 참여할 수 있는 사람\n"+
+            "GDSC Konkuk 모집 분야\n"+
+            "- Developer Relations\n"+
+            "- UX/UI Designer\n"+
+            "- Android\n"+
+            "- iOS\n"+
+            "- Flutter\n"+
+            "- Backend\n"+
+            "- Web Frontend\n"+
             "- AI/ML Engineer"
-        )
     )
     LazyColumn(
         modifier = Modifier
@@ -109,7 +110,7 @@ fun ClubInfoSection(clubDetails: ClubDetails) {
             .clip(RoundedCornerShape(15.dp, 15.dp, 0.dp, 0.dp))
             .background(Color.White),
     ) {
-        Row(){
+        Row(modifier = Modifier.fillMaxWidth()){
             Column {
                 Text(
                     text = "정보",
@@ -125,29 +126,50 @@ fun ClubInfoSection(clubDetails: ClubDetails) {
                     modifier = Modifier.padding(start = 20.dp)
                 )
             }
+            Spacer(modifier = Modifier.width(180.dp))
             Icon(
-                painter = painterResource(id = R.drawable.icon_heart),
+                painter = painterResource(id = R.drawable.icon_instagram),
                 contentDescription = null,
-                tint = Color.Red,
-                modifier = Modifier.size(24.dp).padding(top = 8.dp).align(Alignment.CenterVertically)
+                tint = Color.Unspecified,
+                modifier = Modifier
+                    .size(32.dp)
+                    .padding(top = 8.dp)
+                    .align(Alignment.CenterVertically)
             )
             Icon(
-                painter = painterResource(id = R.drawable.icon_heart),
+                painter = painterResource(id = R.drawable.icon_everytime),
                 contentDescription = null,
-                tint = Color.Red,
-                modifier = Modifier.size(24.dp).padding(top = 8.dp).align(Alignment.CenterVertically)
+                tint = Color.Unspecified,
+                modifier = Modifier
+                    .size(32.dp)
+                    .padding(start = 10.dp, top = 8.dp)
+                    .align(Alignment.CenterVertically)
             )
 
 
         }
-        Spacer(modifier = Modifier.height(8.dp))
-        Text(text = "회장: ${clubDetails.president}")
-        Text(text = "연락처: ${clubDetails.contact}")
-        Text(text = "설립일: ${clubDetails.foundingDate}")
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Text(text = "Instagram: ")
-            Text(text = clubDetails.instagram, color = Color.Blue)
+        Spacer(modifier = Modifier
+            .fillMaxWidth()
+            .padding(20.dp)
+            .height(1.dp)
+            .border(10.dp, Color.Black))
+        Row(modifier = Modifier.fillMaxWidth().padding(start = 20.dp, end = 20.dp,bottom=12.dp), horizontalArrangement = Arrangement.SpaceBetween ) {
+            Text(text = "회장", fontWeight = FontWeight.Bold, fontSize = 15.sp)
+            Text(text = clubDetails.president,fontWeight = FontWeight.Bold, fontSize = 15.sp)
         }
+        Row(modifier = Modifier.fillMaxWidth().padding(start = 20.dp, end = 20.dp,bottom=12.dp), horizontalArrangement = Arrangement.SpaceBetween ) {
+            Text(text = "연락처", fontWeight = FontWeight.Bold, fontSize = 15.sp)
+            Text(text = clubDetails.contact,fontWeight = FontWeight.Bold, fontSize = 15.sp)
+        }
+        Row(modifier = Modifier.fillMaxWidth().padding(start = 20.dp, end = 20.dp,bottom=12.dp), horizontalArrangement = Arrangement.SpaceBetween ) {
+            Text(text = "설립일", fontWeight = FontWeight.Bold, fontSize = 15.sp)
+            Text(text = clubDetails.foundingDate,fontWeight = FontWeight.Bold, fontSize = 15.sp)
+        }
+        Spacer(modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 20.dp)
+            .height(2.dp)
+            .border(10.dp, Color.Black))
     }
 }
 
@@ -156,11 +178,20 @@ fun ClubIntroductionSection(introduction: String) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp)
-    ) {
-        Text(text = "동아리 소개")
-        Spacer(modifier = Modifier.height(8.dp))
-        Text(text = introduction)
+            .background(Color.White),
+    ){
+        Text(text = "동아리 소개", fontSize = 20.sp, fontWeight = FontWeight.ExtraBold, modifier = Modifier.padding(20.dp))
+        Spacer(modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 20.dp, end = 20.dp)
+            .height(1.dp)
+            .border(10.dp, Color.Black))
+        Text(text = introduction,fontSize = 14.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(20.dp))
+        Spacer(modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 20.dp)
+            .height(2.dp)
+            .border(10.dp, Color.Black))
     }
 }
 
@@ -169,27 +200,38 @@ fun ClubActivitiesSection(activities: List<String>) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp)
+            .background(Color.White)
     ) {
-        Text(text = "활동 내역")
-        Spacer(modifier = Modifier.height(8.dp))
+        Text(text = "활동 내역", fontSize = 20.sp, fontWeight = FontWeight.ExtraBold, modifier = Modifier.padding(20.dp))
+        Spacer(modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 20.dp, end = 20.dp)
+            .height(1.dp)
+            .border(10.dp, Color.Black))
         activities.forEach { activity ->
-            Text(text = activity)
+            Text(text = "- "+activity, fontSize = 14.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(start = 20.dp, end = 20.dp,top = 10.dp))
         }
+        Spacer(modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 20.dp)
+            .height(2.dp)
+            .border(10.dp, Color.Black))
     }
 }
 
 @Composable
-fun ClubRecruitmentSection(recruitment: List<String>) {
+fun ClubRecruitmentSection(recruitment: String) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp)
+            .background(Color.White)
     ) {
-        Text(text = "모집 글")
-        Spacer(modifier = Modifier.height(8.dp))
-        recruitment.forEach { recruit ->
-            Text(text = recruit)
-        }
+        Text(text = "모집 글", fontSize = 20.sp, fontWeight = FontWeight.ExtraBold, modifier = Modifier.padding(20.dp))
+        Spacer(modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 20.dp, end = 20.dp)
+            .height(1.dp)
+            .border(10.dp, Color.Black))
+        Text(text = recruitment,fontSize = 14.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(start = 20.dp, end = 20.dp,top = 10.dp))
     }
 }

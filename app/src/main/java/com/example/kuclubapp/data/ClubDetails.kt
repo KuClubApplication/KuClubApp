@@ -11,5 +11,5 @@ data class ClubDetails(
     val instagram: String,
     val introduction: String,
     val activities: List<String>,
-    val recruitment: List<String>
+    val recruitment: String
 )
