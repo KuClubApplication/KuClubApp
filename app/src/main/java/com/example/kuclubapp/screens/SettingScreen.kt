@@ -49,6 +49,7 @@ fun SettingScreen(navController: NavController, navUserViewModel: NavUserViewMod
     val permissionState = rememberPermissionState(
         permission = android.Manifest.permission.POST_NOTIFICATIONS)
     var notificationsEnabled by remember { mutableStateOf(permissionState.status.isGranted) }
+    val prevPermissionState = remember { mutableStateOf(permissionState.status.isGranted) }
 
     LaunchedEffect(permissionState.status.isGranted) {
         notificationsEnabled = permissionState.status.isGranted
@@ -58,7 +59,12 @@ fun SettingScreen(navController: NavController, navUserViewModel: NavUserViewMod
     DisposableEffect(lifecycleOwner) {
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_RESUME) {
-                notificationsEnabled = permissionState.status.isGranted
+                val isGranted = permissionState.status.isGranted
+                notificationsEnabled = isGranted
+
+//                if (!isGranted) {
+//                    (context as? Activity)?.finish()
+//                }
             }
         }
         lifecycleOwner.lifecycle.addObserver(observer)
@@ -69,19 +75,6 @@ fun SettingScreen(navController: NavController, navUserViewModel: NavUserViewMod
 
     Column {
         NotificationSettings(notificationsEnabled) {
-//            val intent = Intent(
-//                Settings.ACTION_ACCESSIBILITY_SETTINGS,
-//                Uri.fromParts("package", context.packageName, null)
-//            )
-//            context.startActivity(intent)
-
-//            val intent = Intent(
-//                Settings.ACTION_ACCESSIBILITY_SETTINGS,
-//                Uri.fromParts("package", context.packageName, null)
-//            )
-//            context.startActivity(intent)
-//            val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
-//            intent.putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
             val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).apply {
                 putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
             }
@@ -118,7 +111,6 @@ fun NotificationSettings(
                 .background(Color(0xFFF0F0F0))
                 .padding(vertical = 12.dp)
                 .drawBehind {
-                    // Draw a line at the bottom
                     val strokeWidth = 1.dp.toPx()
                     drawLine(
                         color = Color.Gray,
