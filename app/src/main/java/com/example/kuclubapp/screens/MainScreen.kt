@@ -68,7 +68,7 @@ fun MainScreen(navController: NavHostController, navUserViewModel: NavUserViewMo
                     }
 
                     composable(NavRoutes.ClubList.route) {
-                        ClubListScreen()
+                        ClubListScreen(navController)
                     }
 
                     composable(NavRoutes.Setting.route) {
@@ -102,7 +102,9 @@ fun MainScreen(navController: NavHostController, navUserViewModel: NavUserViewMo
                     composable(NavRoutes.Alarm.route) {
                         AlarmScreen(navController, navUserViewModel)
                     }
-
+                    composable(NavRoutes.ClubDetail.route) {
+                        ClubDetailScreen()
+                    }
                 }
             }
 

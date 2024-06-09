@@ -21,9 +21,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.kuclubapp.data.ClubDetails
 import com.example.kuclubapp.R
-@Preview(showBackground = true)
 @Composable
-fun DefaultPreview() {
+fun ClubDetailScreen() {
     val clubDetails = ClubDetails(
         name = "GDSC Konkuk",
         imageRes = R.drawable.konkuk_logo,
@@ -50,10 +49,6 @@ fun DefaultPreview() {
             "- AI/ML Engineer"
         )
     )
-    ClubDetailScreen(clubDetails = clubDetails)
-}
-@Composable
-fun ClubDetailScreen(clubDetails: ClubDetails) {
     LazyColumn(
         modifier = Modifier.fillMaxSize()
     ) {

@@ -48,16 +48,8 @@ import com.example.kuclubapp.viewmodel.UserViewModelFactory
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
-@Preview
 @Composable
-fun TestScreen(){
-    val viewModel: NavUserViewModel =
-        viewModel(factory = UserViewModelFactory(UserRepository(Firebase.database)))
-    val navController = rememberNavController()
-    ClubListScreen()
-}
-@Composable
-fun ClubListScreen() {
+fun ClubListScreen(navController:NavHostController) {
 
     
     val context = LocalContext.current
@@ -70,7 +62,7 @@ fun ClubListScreen() {
             ClubItem(R.drawable.konkuk_logo, "중앙동아리", "목방", 13),
             ClubItem(R.drawable.konkuk_logo, "중앙동아리", "목방", 13),
         ) //임시 더미데이터
-        ClubList(clubItems = clubItems)
+        ClubList(clubItems = clubItems,navController)
 
     }
 }
@@ -78,17 +70,17 @@ fun ClubListScreen() {
 
 
 @Composable
-fun ClubList(clubItems: List<ClubItem>) {
+fun ClubList(clubItems: List<ClubItem>,navController: NavHostController) {
     LazyColumn {
         itemsIndexed(clubItems) { index, club ->
             val topPadding = if (index == 0) 31.dp else 15.dp
-            ClubListItem(club = club, topPadding = topPadding)
+            ClubListItem(club = club, topPadding = topPadding,navController)
         }
     }
 }
 
 @Composable
-fun ClubListItem(club: ClubItem, topPadding: Dp) {
+fun ClubListItem(club: ClubItem, topPadding: Dp,navController: NavHostController) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -98,7 +90,7 @@ fun ClubListItem(club: ClubItem, topPadding: Dp) {
             .clip(RoundedCornerShape(20.dp))
             .background(Color.White)
             .clickable {
-
+                navController.navigate(NavRoutes.ClubDetail.route)
             }
     ) {
         Image(
