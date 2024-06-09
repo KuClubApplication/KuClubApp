@@ -46,5 +46,4 @@ class NavUserViewModel(private val repository: UserRepository): ViewModel() {
     fun setUserInfo(id:String) {
         userId = id
     }
-
 }

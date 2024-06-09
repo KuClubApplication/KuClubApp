@@ -36,7 +36,6 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-//            val db = Firebase.firestore
             val db = Firebase.database
 
             val context = LocalContext.current

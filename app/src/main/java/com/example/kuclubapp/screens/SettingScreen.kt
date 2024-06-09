@@ -1,5 +1,7 @@
 package com.example.kuclubapp.screens
 
+import android.content.Intent
+import android.provider.Settings
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -8,9 +10,10 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -26,20 +29,64 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.example.kuclubapp.NavRoutes
 import com.example.kuclubapp.R
 import com.example.kuclubapp.viewmodel.NavUserViewModel
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.rememberPermissionState
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun SettingScreen(navController: NavController, navUserViewModel: NavUserViewModel) {
+    val context = LocalContext.current
+    val permissionState = rememberPermissionState(
+        permission = android.Manifest.permission.POST_NOTIFICATIONS)
+    var notificationsEnabled by remember { mutableStateOf(permissionState.status.isGranted) }
 
-    var notificationsEnabled by remember { mutableStateOf(false) }
+    LaunchedEffect(permissionState.status.isGranted) {
+        notificationsEnabled = permissionState.status.isGranted
+    }
+
+    val lifecycleOwner = LocalLifecycleOwner.current
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME) {
+                notificationsEnabled = permissionState.status.isGranted
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
+        }
+    }
 
     Column {
-        NotificationSettings(notificationsEnabled) { notificationsEnabled = it }
+        NotificationSettings(notificationsEnabled) {
+//            val intent = Intent(
+//                Settings.ACTION_ACCESSIBILITY_SETTINGS,
+//                Uri.fromParts("package", context.packageName, null)
+//            )
+//            context.startActivity(intent)
+
+//            val intent = Intent(
+//                Settings.ACTION_ACCESSIBILITY_SETTINGS,
+//                Uri.fromParts("package", context.packageName, null)
+//            )
+//            context.startActivity(intent)
+//            val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
+//            intent.putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
+            val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).apply {
+                putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
+            }
+            context.startActivity(intent)
+        }
         Spacer(modifier = Modifier.padding(vertical = 5.dp))
         CustomerSupport(navController)
         Spacer(modifier = Modifier.padding(vertical = 5.dp))
@@ -53,9 +100,11 @@ fun SettingScreen(navController: NavController, navUserViewModel: NavUserViewMod
 @Composable
 fun NotificationSettings(
     notificationsEnabled: Boolean,
-    onToggleNotifications: (Boolean) -> Unit
+    onClick: () -> Unit
 ) {
-    Column(modifier = Modifier.fillMaxWidth().padding(vertical = 20.dp)) {
+    Column(modifier = Modifier
+        .fillMaxWidth()
+        .padding(vertical = 20.dp)) {
         Text(
             text = "알림",
             fontSize = 16.sp,
@@ -67,26 +116,29 @@ fun NotificationSettings(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(Color(0xFFF0F0F0))
-                .padding(vertical = 8.dp)
+                .padding(vertical = 12.dp)
                 .drawBehind {
                     // Draw a line at the bottom
                     val strokeWidth = 1.dp.toPx()
                     drawLine(
                         color = Color.Gray,
-                        start = Offset(0f, size.height + 8.dp.toPx() - strokeWidth / 2),
-                        end = Offset(size.width, size.height + 8.dp.toPx() - strokeWidth / 2),
+                        start = Offset(0f, size.height + 12.dp.toPx() - strokeWidth / 2),
+                        end = Offset(size.width, size.height + 12.dp.toPx() - strokeWidth / 2),
                         strokeWidth = strokeWidth
                     )
                 }
+                .clickable { onClick() }
         ) {
             Text(
                 text = "알림 수신 동의",
                 modifier = Modifier.padding(horizontal = 10.dp)
             )
             Spacer(modifier = Modifier.weight(1f))
-            Switch(
-                checked = notificationsEnabled,
-                onCheckedChange = { onToggleNotifications(it) }
+            Text(
+                text = if (notificationsEnabled) "ON" else "OFF",
+                fontWeight = FontWeight.Bold,
+                color = if (notificationsEnabled) Color(0xFF008000) else Color.Red,
+                modifier = Modifier.padding(horizontal = 10.dp)
             )
         }
     }

@@ -1,12 +1,20 @@
 package com.example.kuclubapp.screens
 
+import android.Manifest
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -19,6 +27,10 @@ import androidx.navigation.navArgument
 import com.example.kuclubapp.NavRoutes
 import com.example.kuclubapp.viewmodel.NavNoticeViewModel
 import com.example.kuclubapp.viewmodel.NavUserViewModel
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.rememberPermissionState
+import com.google.accompanist.permissions.shouldShowRationale
 
 @Composable
 fun rememberViewModelStoreOwner(): ViewModelStoreOwner {
@@ -31,13 +43,35 @@ val LocalNavGraphViewModelStoreOwner =
         error("Undefined")
     }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalPermissionsApi::class)
 @Composable
 fun MainScreen(navController: NavHostController, navUserViewModel: NavUserViewModel,
                navNoticeViewModel: NavNoticeViewModel,
                startDestination: String,
                onLoginSuccess: (String) -> Unit) {
     val navStoreOwner = rememberViewModelStoreOwner()
+
+    val context = LocalContext.current
+    val permissionState =
+        rememberPermissionState(permission = Manifest.permission.POST_NOTIFICATIONS)
+
+    var showDialog by remember {
+        mutableStateOf(false)
+    }
+
+    val requestPermissionLauncher
+    = rememberLauncherForActivityResult(contract = ActivityResultContracts.RequestPermission()) { isGranted ->
+        if (isGranted)
+            Toast.makeText(context, "알림 권한이 허용되었습니다.", Toast.LENGTH_SHORT).show()
+        else
+            if (!permissionState.status.shouldShowRationale)
+                showDialog = true
+    }
+
+    LaunchedEffect(key1 = permissionState) {
+        if(!permissionState.status.isGranted && !permissionState.status.shouldShowRationale)
+            requestPermissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
+    }
 
     CompositionLocalProvider(
         LocalNavGraphViewModelStoreOwner provides navStoreOwner
