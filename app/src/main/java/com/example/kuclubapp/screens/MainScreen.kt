@@ -103,7 +103,7 @@ fun MainScreen(navController: NavHostController, navUserViewModel: NavUserViewMo
                     }
 
                     composable(NavRoutes.ClubList.route) {
-                        ClubListScreen(navController, navUserViewModel)
+                        ClubListScreen(navController)
                     }
 
                     composable(NavRoutes.Setting.route) {
@@ -137,7 +137,12 @@ fun MainScreen(navController: NavHostController, navUserViewModel: NavUserViewMo
                     composable(NavRoutes.Alarm.route) {
                         AlarmScreen(navController, navUserViewModel)
                     }
-
+                    composable(NavRoutes.ClubDetail.route) {
+                        ClubDetailScreen(navController)
+                    }
+                    composable(NavRoutes.webView.route) {
+                        openWebView("https://www.instagram.com/newjeans_official/")
+                    }
                 }
             }
 
