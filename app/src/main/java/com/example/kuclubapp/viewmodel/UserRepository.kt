@@ -16,6 +16,9 @@ class UserRepository(private val firebaseDB: FirebaseDatabase) {
         userDao.getValidUser(id, passwd, onResult)
     }
 
+    suspend fun geUserByID(id: String, onResult:(User)->Unit){
+        userDao.getUserById(id, onResult)
+    }
 }
 
 
