@@ -25,6 +25,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.kuclubapp.NavRoutes
+import com.example.kuclubapp.viewmodel.NavClubViewModel
 import com.example.kuclubapp.viewmodel.NavNoticeViewModel
 import com.example.kuclubapp.viewmodel.NavUserViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -46,7 +47,7 @@ val LocalNavGraphViewModelStoreOwner =
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalPermissionsApi::class)
 @Composable
 fun MainScreen(navController: NavHostController, navUserViewModel: NavUserViewModel,
-               navNoticeViewModel: NavNoticeViewModel,
+               navNoticeViewModel: NavNoticeViewModel, navClubViewModel: NavClubViewModel,
                startDestination: String,
                onLoginSuccess: (String) -> Unit) {
     val navStoreOwner = rememberViewModelStoreOwner()
@@ -114,7 +115,7 @@ fun MainScreen(navController: NavHostController, navUserViewModel: NavUserViewMo
                     }
 
                     composable(NavRoutes.Mypage.route) {
-                        MypageScreen(navController, navUserViewModel)
+                        MypageScreen(navController, navUserViewModel, navClubViewModel)
                     }
 
                     composable(NavRoutes.Contact.route) {

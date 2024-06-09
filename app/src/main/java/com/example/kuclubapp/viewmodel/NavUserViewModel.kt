@@ -21,7 +21,9 @@ class UserViewModelFactory(private val repository: UserRepository): ViewModelPro
 
 class NavUserViewModel(private val repository: UserRepository): ViewModel() {
     var userId:String ?= null
-    var userPasswd:String ?= null
+//    var userPasswd:String ?= null
+    var userName:String? = null
+    var userMajor:String? = null
 
     var loginStatus = mutableStateOf(false)
 
@@ -44,6 +46,13 @@ class NavUserViewModel(private val repository: UserRepository): ViewModel() {
     }
 
     fun setUserInfo(id:String) {
-        userId = id
+        viewModelScope.launch {
+            repository.geUserByID(id){
+                userId = it.userId
+                userName = it.userNm
+                userMajor = it.userMajor
+//                userPasswd = it.userPasswd  // pw 꼭 들고 와야 할까요?
+            }
+        }
     }
 }

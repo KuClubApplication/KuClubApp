@@ -40,4 +40,27 @@ class UserDao (private val firebaseDB: FirebaseDatabase) {
             }
         })
     }
+
+    suspend fun getUserById(id: String, onResult: (User) -> Unit){
+        val users = mutableListOf<User>()
+        val table = firebaseDB.getReference("KuclubDB/User")
+        val userQuery = table.orderByChild("userId").equalTo(id)
+        userQuery.addListenerForSingleValueEvent(object :ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                for (UserSnapshot in snapshot.children){
+                    val user = UserSnapshot.getValue(User::class.java)
+                    user?.let { users.add(it) }
+                }
+                if (users.isEmpty())
+                    onResult(User())
+                else
+                    onResult(users[0])
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+
+            }
+
+        })
+    }
 }

@@ -17,6 +17,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
 import com.example.kuclubapp.screens.MainScreen
+import com.example.kuclubapp.viewmodel.ClubRepository
+import com.example.kuclubapp.viewmodel.ClubViewModelFactory
+import com.example.kuclubapp.viewmodel.NavClubViewModel
 import com.example.kuclubapp.viewmodel.NavNoticeViewModel
 import com.example.kuclubapp.viewmodel.NavUserViewModel
 import com.example.kuclubapp.viewmodel.NoticeRepository
@@ -46,7 +49,8 @@ class MainActivity : ComponentActivity() {
                 viewModel(factory = UserViewModelFactory(UserRepository(db)))
             val noticeViewModel: NavNoticeViewModel =
                 viewModel(factory = NoticeViewModelFactory(NoticeRepository(db)))
-
+            val clubViewModel: NavClubViewModel =
+                viewModel(factory = ClubViewModelFactory(ClubRepository(db)))
             val navController = rememberNavController()
 
             var startDestination by remember { mutableStateOf(NavRoutes.Login.route) }
@@ -77,6 +81,7 @@ class MainActivity : ComponentActivity() {
                 navController = navController,
                 navUserViewModel = viewModel,
                 navNoticeViewModel = noticeViewModel,
+                navClubViewModel = clubViewModel,
                 startDestination = startDestination,
                 onLoginSuccess = { token ->
                     lifecycleScope.launch {
