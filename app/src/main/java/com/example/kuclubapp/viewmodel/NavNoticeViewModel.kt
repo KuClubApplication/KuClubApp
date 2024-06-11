@@ -1,5 +1,6 @@
 package com.example.kuclubapp.viewmodel
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -23,6 +24,17 @@ class NavNoticeViewModel(private val repository: NoticeRepository): ViewModel() 
 
     private val _noticeDetail = MutableLiveData<Notice?>()
     val noticeDetail: LiveData<Notice?> = _noticeDetail
+
+    fun insertNotice(notice: Notice, context: Context){
+        viewModelScope.launch {
+            repository.insertNotice(notice, context)
+        }
+    }
+    fun deleteNotice(notice: Notice){
+        viewModelScope.launch {
+            repository.deleteNotice(notice)
+        }
+    }
 
     fun getAllNotices() {
         viewModelScope.launch {

@@ -1,11 +1,25 @@
 package com.example.kuclubapp.firebaseDB
 
+import android.content.Context
+import com.example.kuclubapp.sendNoticeNotification
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 
 class NoticeDao(private val firebaseDB: FirebaseDatabase) {
+    suspend fun insertNotice(notice: Notice, context: Context){
+        var table = firebaseDB.getReference("KuclubDB/Notice")
+        var noticeInfo = table.child(notice.noticeNum.toString()).setValue(notice)
+        sendNoticeNotification(context, "새로운 공지사항이 있습니다.")
+//        clubInfo.child("clubCategoryId").setValue(clubCategory.clubCategoryId)
+//        clubInfo.child("clubCategory").setValue(clubCategory.clubCategory)
+    }
+
+    suspend fun deleteNotice(notice: Notice){
+        var table = firebaseDB.getReference("KuclubDB/Notice")
+        table.orderByKey().equalTo(notice.noticeNum.toString()).ref.removeValue()
+    }
 
     suspend fun getAllNotices(onResult: (List<Notice>) -> Unit) {
         val notices = mutableListOf<Notice>()
