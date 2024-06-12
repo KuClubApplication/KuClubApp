@@ -100,7 +100,8 @@ fun NotificationSettings(
 ) {
     Column(modifier = Modifier
         .fillMaxWidth()
-        .padding(vertical = 20.dp)) {
+        .padding(vertical = 20.dp)
+    ) {
         Text(
             text = "알림",
             fontSize = 16.sp,
