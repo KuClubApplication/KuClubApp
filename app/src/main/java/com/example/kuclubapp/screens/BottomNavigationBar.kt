@@ -1,6 +1,8 @@
 package com.example.kuclubapp.screens
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
@@ -12,6 +14,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -22,6 +27,8 @@ import com.example.kuclubapp.R
 fun BottomNavigationBar(navController: NavHostController) {
     var selectedItem by remember { mutableStateOf(navController.currentBackStackEntry?.destination?.route) }
 
+    val gradientColors = listOf(Color(0xFFD9FDE8), Color(0xFFFFFFFF))
+
     LaunchedEffect(navController) {
         navController.addOnDestinationChangedListener { _, destination, _ ->
             selectedItem = destination.route
@@ -29,7 +36,7 @@ fun BottomNavigationBar(navController: NavHostController) {
     }
 
     BottomNavigation(
-        backgroundColor = MaterialTheme.colorScheme.primary, // 원하는 색상으로 변경
+        backgroundColor = MaterialTheme.colorScheme.background, // 원하는 색상으로 변경
     ) {
         BottomNavigationItem(
             icon = {

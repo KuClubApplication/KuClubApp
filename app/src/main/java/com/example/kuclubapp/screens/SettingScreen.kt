@@ -7,6 +7,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
@@ -73,7 +74,9 @@ fun SettingScreen(navController: NavController, navUserViewModel: NavUserViewMod
         }
     }
 
-    Column {
+    Column(
+        modifier = Modifier.fillMaxSize().background(Color(0xFFD9FDE8).copy(alpha = 0.6f))
+    ) {
         NotificationSettings(notificationsEnabled) {
             val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).apply {
                 putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
@@ -102,7 +105,7 @@ fun NotificationSettings(
             text = "알림",
             fontSize = 16.sp,
             fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(vertical = 8.dp, horizontal = 10.dp)
+            modifier = Modifier.padding(horizontal = 10.dp)
         )
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -123,14 +126,14 @@ fun NotificationSettings(
         ) {
             Text(
                 text = "알림 수신 동의",
-                modifier = Modifier.padding(horizontal = 10.dp)
+                modifier = Modifier.padding(horizontal = 16.dp)
             )
             Spacer(modifier = Modifier.weight(1f))
             Text(
                 text = if (notificationsEnabled) "ON" else "OFF",
                 fontWeight = FontWeight.Bold,
                 color = if (notificationsEnabled) Color(0xFF008000) else Color.Red,
-                modifier = Modifier.padding(horizontal = 10.dp)
+                modifier = Modifier.padding(horizontal = 16.dp)
             )
         }
     }
@@ -201,12 +204,13 @@ fun SupportOption(label: String, onClick: () -> Unit) {
     ) {
         Text(
             text = label,
-            modifier = Modifier.padding(horizontal = 10.dp)
+            modifier = Modifier.padding(horizontal = 16.dp)
         )
         Spacer(modifier = Modifier.weight(1f))
         Icon(
             imageVector = ImageVector.vectorResource(id = R.drawable.baseline_arrow_forward_ios_24),
-            contentDescription = "arrow_icon"
+            contentDescription = "arrow_icon",
+            modifier = Modifier.padding(horizontal = 16.dp)
         )
     }
 }
