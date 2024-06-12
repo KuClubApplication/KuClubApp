@@ -115,23 +115,39 @@ fun MypageScreen(navController: NavHostController, navUserViewModel: NavUserView
 @Composable
 fun noLikedClub(userId:String, navClubViewModel:NavClubViewModel){
     LazyColumn(
-        modifier = Modifier.fillMaxSize().background(Color.White)
-    ){
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White)
+    ) {
         item {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(5.dp)
+                    .padding(16.dp) // 테두리로부터 16.dp 간격을 줍니다
                     .background(Color.White, RoundedCornerShape(20.dp))
-                    .height(100.dp)
+                    .height(300.dp)
                     .clickable { testInsert(userId, navClubViewModel) }, // test 용 함수 (추후 제거 예정)
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
             ) {
-                Text(
-                    text = "  관심 동아리가 없습니다",
-                    fontSize = 25.sp,
-                    fontWeight = FontWeight.Bold
-                )
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center,
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.koo), // 여기에 원하는 이미지 리소스를 넣습니다.
+                        contentDescription = "No clubs",
+                        modifier = Modifier.size(200.dp) // 이미지 크기를 설정합니다.
+                    )
+                    Spacer(modifier = Modifier.height(8.dp)) // 이미지와 텍스트 사이의 간격을 설정합니다.
+                    Text(
+                        text = "관심 동아리가 없습니다",
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Normal,
+                        color = Color.Gray // 텍스트 색상을 설정합니다.
+                    )
+                }
             }
         }
     }
