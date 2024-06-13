@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -28,6 +29,7 @@ fun ContactInfoScreen(controller: NavHostController, navUserViewModel: NavUserVi
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(Color(0xFFD9FDE8).copy(alpha = 0.6f))
             .padding(16.dp)
     ) {
         ContactInfoItem("공식 이메일 주소", "kuclub3official@gmail.com")
@@ -50,6 +52,7 @@ fun ContactInfoItem(label: String, value: String) {
             Text(
                 text = label,
                 fontSize = 18.sp,
+                fontWeight = FontWeight.Black,
                 color = Color.Black
             )
             Spacer(modifier = Modifier.height(8.dp))
@@ -66,26 +69,26 @@ fun ContactInfoItem(label: String, value: String) {
 fun DeveloperCallInfo() {
     Column(modifier = Modifier.fillMaxWidth()) {
         Text(
-            text = "개발자",
+            text = "Contact",
             fontSize = 16.sp,
-            fontWeight = FontWeight.Bold,
+            fontWeight = FontWeight.Black,
             modifier = Modifier.padding(vertical = 8.dp, horizontal = 10.dp)
         )
         DeveloperInfoItem(
             developerNm = "최예름",
-            developerPhone = "010-1234-5678"
+            developerPhone = "Tel: 010-1234-5678"
         )
         DeveloperInfoItem(
             developerNm = "박성준",
-            developerPhone = "010-1234-5678"
+            developerPhone = "Tel: 010-1234-5678"
         )
         DeveloperInfoItem(
             developerNm = "박성근",
-            developerPhone = "010-1234-5678"
+            developerPhone = "Tel: 010-1234-5678"
         )
         DeveloperInfoItem(
             developerNm = "김종우",
-            developerPhone = "010-1234-5678"
+            developerPhone = "Tel: 010-1234-5678"
         )
     }
 }
@@ -111,6 +114,7 @@ fun DeveloperInfoItem(developerNm: String, developerPhone: String) {
         Row {
             Text(
                 text = developerNm,
+                fontWeight = FontWeight.Black,
                 modifier = Modifier.padding(horizontal = 10.dp)
             )
             Spacer(modifier = Modifier.weight(1f))

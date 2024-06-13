@@ -246,6 +246,7 @@ fun ClubRecruitmentSection(recruitment: String) {
         modifier = Modifier
             .fillMaxWidth()
             .background(Color.White)
+            .padding(bottom = 40.dp)
     ) {
         Text(text = "모집 글", fontSize = 20.sp, fontWeight = FontWeight.ExtraBold, modifier = Modifier.padding(20.dp))
         Spacer(modifier = Modifier
