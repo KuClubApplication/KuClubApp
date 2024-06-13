@@ -26,6 +26,7 @@ import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -55,7 +56,7 @@ fun MypageScreen(navController: NavHostController, navUserViewModel: NavUserView
     val context = LocalContext.current
 
     Column (
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize().background(Color(0xFFD9FDE8).copy(alpha = 0.6f)),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -90,7 +91,10 @@ fun MypageScreen(navController: NavHostController, navUserViewModel: NavUserView
         Spacer(modifier = Modifier.height(16.dp))
         Text(text = navUserViewModel.userMajor.toString(), fontSize = 25.sp, color = Color.Gray)
         Spacer(modifier = Modifier.height(24.dp))
-        Card (modifier = Modifier.fillMaxSize()){
+        Card (
+            colors = CardDefaults.cardColors(containerColor = Color.White),
+            modifier = Modifier.fillMaxSize()
+        ) {
             Text(text = "관심 동아리 목록", fontSize = 25.sp, fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(10.dp))
             var userId = navUserViewModel.userId?:""    // userId에 @ 같이 있어서 없앰
@@ -110,23 +114,40 @@ fun MypageScreen(navController: NavHostController, navUserViewModel: NavUserView
 }
 @Composable
 fun noLikedClub(userId:String, navClubViewModel:NavClubViewModel){
-    LazyColumn{
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White)
+    ) {
         item {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(5.dp)
-                    .background(Color.White, RoundedCornerShape(10.dp))
-                    .border(10.dp, Color.LightGray, RoundedCornerShape(10.dp))
-                    .height(70.dp)
+                    .padding(16.dp) // 테두리로부터 16.dp 간격을 줍니다
+                    .background(Color.White, RoundedCornerShape(20.dp))
+                    .height(300.dp)
                     .clickable { testInsert(userId, navClubViewModel) }, // test 용 함수 (추후 제거 예정)
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
             ) {
-                Text(
-                    text = "  관심 동아리가 없습니다",
-                    fontSize = 25.sp,
-                    fontWeight = FontWeight.Bold
-                )
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center,
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.koo), // 여기에 원하는 이미지 리소스를 넣습니다.
+                        contentDescription = "No clubs",
+                        modifier = Modifier.size(200.dp) // 이미지 크기를 설정합니다.
+                    )
+                    Spacer(modifier = Modifier.height(8.dp)) // 이미지와 텍스트 사이의 간격을 설정합니다.
+                    Text(
+                        text = "관심 동아리가 없습니다",
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Normal,
+                        color = Color.Gray // 텍스트 색상을 설정합니다.
+                    )
+                }
             }
         }
     }

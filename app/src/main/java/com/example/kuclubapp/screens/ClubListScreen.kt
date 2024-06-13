@@ -55,14 +55,14 @@ fun ClubListScreen(navController:NavHostController) {
     val context = LocalContext.current
 
     Column (
-        modifier = Modifier.fillMaxSize().background(Color(0xFFD9FDE8))
+        modifier = Modifier.fillMaxSize().background(Color(0xFFD9FDE8).copy(alpha = 0.6f))
     ) {
         val clubItems = listOf(
             ClubItem(R.drawable.konkuk_logo, "중앙동아리", "목방", 13),
             ClubItem(R.drawable.konkuk_logo, "중앙동아리", "목방", 13),
             ClubItem(R.drawable.konkuk_logo, "중앙동아리", "목방", 13),
         ) //임시 더미데이터
-        ClubList(clubItems = clubItems,navController)
+        ClubList(clubItems = clubItems, navController = navController)
 
     }
 }
@@ -70,7 +70,7 @@ fun ClubListScreen(navController:NavHostController) {
 
 
 @Composable
-fun ClubList(clubItems: List<ClubItem>,navController: NavHostController) {
+fun ClubList(clubItems: List<ClubItem>, navController: NavHostController) {
     LazyColumn {
         itemsIndexed(clubItems) { index, club ->
             val topPadding = if (index == 0) 31.dp else 15.dp
@@ -104,17 +104,17 @@ fun ClubListItem(club: ClubItem, topPadding: Dp,navController: NavHostController
         )
         Column(modifier = Modifier.weight(1f).align(Alignment.CenterVertically)) {
             Text(
-                text = club.category, fontSize = 14.sp,
+                text = club.category, fontSize = 16.sp,
                 color = Color.Gray
             )
             Text(
-                text = club.name,fontSize = 18.sp,
+                text = club.name,fontSize = 20.sp,
                 color = Color.Black
             )
         }
         Spacer(modifier = Modifier.weight(1f))
         Row(
-            modifier = Modifier.align(Alignment.Bottom).padding(bottom = 10.dp, end = 5.dp)
+            modifier = Modifier.align(Alignment.Bottom).padding(bottom = 10.dp, end = 15.dp)
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.icon_heart),
