@@ -124,7 +124,7 @@ fun MainScreen(navController: NavHostController, navUserViewModel: NavUserViewMo
                     }
 
                     composable(NavRoutes.NoticeList.route) {
-                        NoticeListScreen(navController, navUserViewModel, navNoticeViewModel)
+                        NoticeListScreen(navController, navUserViewModel, navNoticeViewModel, context)
                     }
 
                     composable(

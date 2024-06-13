@@ -5,4 +5,6 @@ data class Notice(
     val noticeTitle: String = "",
     val noticeDt: String = "",
     val noticeContent: String = ""
-)
+){
+    constructor():this(0, "noTitle", "noDetail", "noContent")
+}

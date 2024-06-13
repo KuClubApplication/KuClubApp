@@ -55,6 +55,9 @@ class MainActivity : ComponentActivity() {
 
             var startDestination by remember { mutableStateOf(NavRoutes.Login.route) }
 
+            // 공지사항 notification 생성
+            createNotificationChannel(this)
+
             LaunchedEffect(tokenFlow.value) {
                 tokenFlow.value?.let { token ->
                     Log.i("token", "LaunchedEffect:tokenFlow")
