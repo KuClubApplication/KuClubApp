@@ -240,7 +240,6 @@ fun RegisterScreen(navController: NavHostController, navUserViewModel: NavUserVi
                         contentDescription = "email_icon"
                     )
                 },
-                visualTransformation = PasswordVisualTransformation(),
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Number,
                     imeAction = ImeAction.Done),
