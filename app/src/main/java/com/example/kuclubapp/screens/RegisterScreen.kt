@@ -74,6 +74,8 @@ fun RegisterScreen(navController: NavHostController, navUserViewModel: NavUserVi
 
     val user = User(userId, userPasswd, userNm, userMajor)
 
+    val passwordRegex = Regex("^.{6,}\$")
+
     Column(
         modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.Center,
@@ -155,6 +157,11 @@ fun RegisterScreen(navController: NavHostController, navUserViewModel: NavUserVi
                     imeAction = ImeAction.Next),
                 modifier = Modifier.padding(10.dp)
             )
+
+            if (!passwordRegex.matches(userPasswd)) {
+                Text("비밀번호는 최소 6자 이상이어야 합니다.", color = Color.Red,
+                    modifier = Modifier.padding(horizontal = 10.dp))
+            }
         }
 
         Column(
@@ -267,9 +274,12 @@ fun RegisterScreen(navController: NavHostController, navUserViewModel: NavUserVi
             }
             Button(
                 onClick = {
-                    if (userAuthNum == randomNum) {
+                    if (!passwordRegex.matches(userPasswd)) {
+                        Toast.makeText(context, "비밀번호는 최소 6자 이상이어야 합니다.", Toast.LENGTH_SHORT).show()
+                    }
+                    else if (userAuthNum == randomNum) {
                         navUserViewModel.insertUser(user)
-                        navController.navigate(NavRoutes.Login.route)
+                        navController.navigate(NavRoutes.RegisterSuccess.route)
                     } else {
                         Toast.makeText(context, "인증번호가 일치하지 않습니다.", Toast.LENGTH_SHORT).show()
                     }

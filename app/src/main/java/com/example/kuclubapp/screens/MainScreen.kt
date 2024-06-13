@@ -103,6 +103,10 @@ fun MainScreen(navController: NavHostController, navUserViewModel: NavUserViewMo
                         RegisterScreen(navController, navUserViewModel)
                     }
 
+                    composable(NavRoutes.RegisterSuccess.route) {
+                        RegisterSuccessScreen(navController, navUserViewModel)
+                    }
+
                     composable(NavRoutes.ClubList.route) {
                         ClubListScreen(navController)
                     }

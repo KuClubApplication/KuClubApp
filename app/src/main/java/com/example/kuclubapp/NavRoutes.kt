@@ -4,6 +4,7 @@ sealed class NavRoutes(val route: String) {
 
     object Login : NavRoutes("Login")
     object Register : NavRoutes("Register")
+    object RegisterSuccess : NavRoutes("RegisterSuccess")
     object ClubList : NavRoutes("ClubList")
     object Setting : NavRoutes("Setting")
     object Category : NavRoutes("Category")
