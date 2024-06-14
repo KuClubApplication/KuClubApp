@@ -5,15 +5,21 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -76,8 +82,13 @@ fun RegisterScreen(navController: NavHostController, navUserViewModel: NavUserVi
 
     val passwordRegex = Regex("^.{6,}\$")
 
+    var expanded by remember { mutableStateOf(false) }
+    var selectedMajor by remember { mutableStateOf("") }
+
     Column(
-        modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()),
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -187,7 +198,7 @@ fun RegisterScreen(navController: NavHostController, navUserViewModel: NavUserVi
                     )
                 },
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
-                modifier = Modifier.padding(10.dp)
+                modifier = Modifier.padding(horizontal = 10.dp)
             )
         }
 
@@ -200,22 +211,66 @@ fun RegisterScreen(navController: NavHostController, navUserViewModel: NavUserVi
                 style = TextStyle(
                     fontSize = 20.sp,
                     fontWeight = FontWeight.ExtraBold
-                )
+                ),
+                modifier = Modifier.padding(horizontal = 50.dp)
             )
 
-            OutlinedTextField(
-                value = userMajor?:"",
-                onValueChange = { userMajor = it },
-                label = { Text("학과 입력") },
-                leadingIcon = {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .padding(horizontal = 50.dp)
+                    .fillMaxWidth()
+            ) {
+                OutlinedTextField(
+                    value = selectedMajor,
+                    onValueChange = { selectedMajor = it },
+                    label = { Text("학과 선택") },
+                    leadingIcon = {
+                        Icon(
+                            imageVector = ImageVector.vectorResource(id = R.drawable.baseline_menu_book_24),
+                            contentDescription = "major_icon"
+                        )
+                    },
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(end = 4.dp),
+                    readOnly = true
+                )
+
+                IconButton(
+                    onClick = { expanded = !expanded },
+                    modifier = Modifier
+                        .size(56.dp)
+                ) {
                     Icon(
-                        imageVector = ImageVector.vectorResource(id = R.drawable.baseline_menu_book_24),
-                        contentDescription = "major_icon"
+                        imageVector = ImageVector.vectorResource(id = R.drawable.baseline_arrow_drop_down_24),
+                        contentDescription = "dropdown_icon"
                     )
-                },
-                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
-                modifier = Modifier.padding(10.dp)
-            )
+                }
+            }
+
+            DropdownMenu(
+                expanded = expanded,
+                onDismissRequest = { expanded = false },
+                modifier = Modifier
+                    .width(200.dp)
+                    .fillMaxWidth()
+                    .heightIn(max = 200.dp)
+            ) {
+                listOf("컴퓨터공학부", "국어국문학과", "영어영문학과", "중어중문학과", "철학과", "사학과",
+                    "지리학과", "미디어커뮤니케이션학과", "문화콘텐츠학과", "수학과", "물리학과", "화학과",
+                    "건축학부", "사회환경공학부", "기계항공공학부", "전기전자공학부", "화학공학부",
+                    "산업공학과", "생물공학과").forEach { major ->
+                    DropdownMenuItem(
+                        text = { Text(major) },
+                        onClick = {
+                            selectedMajor = major
+                            expanded = false
+                        }
+                    )
+                }
+            }
         }
 
         Column(
