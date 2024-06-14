@@ -49,14 +49,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.kuclubapp.DataStoreManager
-import com.example.kuclubapp.NavRoutes
-import com.example.kuclubapp.R
-import com.example.kuclubapp.viewmodel.NavUserViewModel
 import com.example.kuclubapp.IdTokenRequest
 import com.example.kuclubapp.LoginRequest
+import com.example.kuclubapp.NavRoutes
+import com.example.kuclubapp.R
 import com.example.kuclubapp.RetrofitClient
 import com.example.kuclubapp.ServerResponse
 import com.example.kuclubapp.TokenResponse
+import com.example.kuclubapp.viewmodel.NavUserViewModel
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.flow.first
 import retrofit2.Call
@@ -82,6 +82,8 @@ fun LoginScreen(navController: NavHostController,
         mutableStateOf(false)
     }
 
+    var isLoading by remember { mutableStateOf(false) }
+
     LaunchedEffect(isChecked) {
         DataStoreManager.saveAutoLoginStatus(context, isChecked)
     }
@@ -101,123 +103,142 @@ fun LoginScreen(navController: NavHostController,
             .fillMaxSize()
             .background(brush)
     ) {
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Box{
-                Image(
-                    painter = painterResource(id = R.drawable.konkuk_logo),
-                    contentDescription = "main_logo",
-                    modifier = Modifier
-                        .padding(20.dp)
-                        .graphicsLayer(alpha = 0.5f)
-                )
-                Text("KU 동아리",
-                    style = TextStyle(
-                        color = Color.Black,
-                        fontSize = 40.sp,
-                        fontWeight = FontWeight.ExtraBold,
-                        fontFamily = FontFamily.Serif),
-                    modifier = Modifier.align(Alignment.Center)
-                )
-            }
-
-            OutlinedTextField(
-                value = userId?:"",
-                onValueChange = {
-                    if (!it.endsWith("@konkuk.ac.kr")) {
-                        userId = it.removeSuffix("@konkuk.ac.kr") + "@konkuk.ac.kr"
-                    } else {
-                        userId = it
-                    }
-                },
-                label = {Text("아이디 입력")},
-                leadingIcon = {
-                    Icon(
-                        imageVector = ImageVector.vectorResource(id = R.drawable.outline_person_24),
-                        contentDescription = "id_icon"
-                    )
-                },
-                modifier = Modifier.padding(10.dp)
-            )
-
-            OutlinedTextField(
-                value = userPasswd?:"",
-                onValueChange = { userPasswd = it },
-                label = { Text("비밀번호 입력") },
-                leadingIcon = {
-                    Icon(
-                        imageVector = ImageVector.vectorResource(id = R.drawable.baseline_lock_outline_24),
-                        contentDescription = "pw_icon"
-                    )
-                },
-                visualTransformation = PasswordVisualTransformation(),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                modifier = Modifier.padding(10.dp)
-            )
-
-            Button(onClick = {
-                navUserViewModel.getValidUser(userId, userPasswd) { success ->
-                    if (success) {
-                        navUserViewModel.setUserInfo(userId)
-                        login(context, userId, userPasswd, onLoginSuccess)
-                    } else {
-                        Toast.makeText(context, "아이디 또는 비밀번호가 일치하지 않습니다.", Toast.LENGTH_SHORT)
-                            .show()
-                    }
-                }
-            },
-                modifier = Modifier
-                    .width(300.dp)
-                    .height(80.dp)
-                    .padding(10.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFF0A3711),
-                    contentColor = Color.White
-                ),
-                shape = MaterialTheme.shapes.medium
+        if (isLoading) {
+            CircularProgress()
+        } else {
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text("LOGIN", fontSize = 25.sp)
-            }
+                Box{
+                    Image(
+                        painter = painterResource(id = R.drawable.konkuk_logo),
+                        contentDescription = "main_logo",
+                        modifier = Modifier
+                            .padding(20.dp)
+                            .graphicsLayer(alpha = 0.5f)
+                    )
+                    Text(
+                        "KU 동아리",
+                        style = TextStyle(
+                            color = Color.Black,
+                            fontSize = 40.sp,
+                            fontWeight = FontWeight.ExtraBold,
+                            fontFamily = FontFamily.Serif
+                        ),
+                        modifier = Modifier.align(Alignment.Center)
+                    )
+                }
 
-            Row (
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp)
-            ){
-                Checkbox(
-                    checked = isChecked,
-                    onCheckedChange = { isChecked = it },
-                    colors = CheckboxDefaults.colors(checkedColor = Color(0xFF7FFF00))
+                OutlinedTextField(
+                    value = userId?:"",
+                    onValueChange = {
+                        if (!it.endsWith("@konkuk.ac.kr")) {
+                            userId = it.removeSuffix("@konkuk.ac.kr") + "@konkuk.ac.kr"
+                        } else {
+                            userId = it
+                        }
+                    },
+                    label = {Text("아이디 입력")},
+                    leadingIcon = {
+                        Icon(
+                            imageVector = ImageVector.vectorResource(id = R.drawable.outline_person_24),
+                            contentDescription = "id_icon"
+                        )
+                    },
+                    modifier = Modifier.padding(10.dp)
                 )
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(text = "자동 로그인")
 
-                Spacer(modifier = Modifier.width(60.dp))
-                Row(
+                OutlinedTextField(
+                    value = userPasswd?:"",
+                    onValueChange = { userPasswd = it },
+                    label = { Text("비밀번호 입력") },
+                    leadingIcon = {
+                        Icon(
+                            imageVector = ImageVector.vectorResource(id = R.drawable.baseline_lock_outline_24),
+                            contentDescription = "pw_icon"
+                        )
+                    },
+                    visualTransformation = PasswordVisualTransformation(),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                    modifier = Modifier.padding(10.dp)
+                )
+
+                Button(
+                    onClick = {
+                        isLoading = true
+                        navUserViewModel.getValidUser(userId, userPasswd) { success ->
+                            if (success) {
+                                navUserViewModel.setUserInfo(userId)
+                                login(
+                                    context,
+                                    userId,
+                                    userPasswd,
+                                    onLoginSuccess,
+                                    { isLoading = false })
+                            } else {
+                                isLoading = false
+                                Toast.makeText(
+                                    context,
+                                    "아이디 또는 비밀번호가 일치하지 않습니다.",
+                                    Toast.LENGTH_SHORT
+                                )
+                                    .show()
+                            }
+                    }
+                },
                     modifier = Modifier
-                        .clickable(onClick = {
-                            navController.navigate(NavRoutes.Register.route)
-                        })
-                        .padding(16.dp)
+                        .width(300.dp)
+                        .height(80.dp)
+                        .padding(10.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(0xFF0A3711),
+                        contentColor = Color.White
+                    ),
+                    shape = MaterialTheme.shapes.medium
                 ) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.baseline_person_add_alt_1_24),
-                        contentDescription = "register_icon"
+                    Text("LOGIN", fontSize = 25.sp)
+                }
+
+                Row (
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp)
+                ){
+                    Checkbox(
+                        checked = isChecked,
+                        onCheckedChange = { isChecked = it },
+                        colors = CheckboxDefaults.colors(checkedColor = Color(0xFF7FFF00))
                     )
                     Spacer(modifier = Modifier.width(8.dp))
-                    Text(text = "회원가입")
+                    Text(text = "자동 로그인")
+
+                    Spacer(modifier = Modifier.width(60.dp))
+                    Row(
+                        modifier = Modifier
+                            .clickable(onClick = {
+                                navController.navigate(NavRoutes.Register.route)
+                            })
+                            .padding(16.dp)
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.baseline_person_add_alt_1_24),
+                            contentDescription = "register_icon"
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(text = "회원가입")
+                    }
                 }
             }
         }
     }
 }
 
-private fun login(context: Context, userId: String, password: String, onLoginSuccess: (String) -> Unit) {
+private fun login(context: Context, userId: String, password: String,
+                  onLoginSuccess: (String) -> Unit, onLoadingComplete: () -> Unit) {
     val loginRequest = LoginRequest(userId, password)
     RetrofitClient.instance.login(loginRequest).enqueue(object : Callback<TokenResponse> {
         override fun onResponse(call: Call<TokenResponse>, response: Response<TokenResponse>) {
@@ -242,21 +263,27 @@ private fun login(context: Context, userId: String, password: String, onLoginSuc
                                         // ID 토큰 획득 실패 처리
                                         Toast.makeText(context, "Failed to get ID token", Toast.LENGTH_SHORT).show()
                                     }
+                                    onLoadingComplete()
                                 }
                             } else {
                                 // Firebase 로그인 실패 처리
                                 Toast.makeText(context, "Custom token login failed", Toast.LENGTH_SHORT).show()
+                                onLoadingComplete()
                             }
                         }
+                } else {
+                    onLoadingComplete()
                 }
             } else {
                 Toast.makeText(context, "Login failed", Toast.LENGTH_SHORT).show()
+                onLoadingComplete()
             }
         }
 
         override fun onFailure(call: Call<TokenResponse>, t: Throwable) {
             Toast.makeText(context, "An error occurred", Toast.LENGTH_SHORT).show()
             Log.e("LoginError", "onFailure: ", t)
+            onLoadingComplete()
         }
     })
 }
