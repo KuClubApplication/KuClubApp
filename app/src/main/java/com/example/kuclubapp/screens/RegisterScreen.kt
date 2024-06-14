@@ -251,13 +251,13 @@ fun RegisterScreen(navController: NavHostController, navUserViewModel: NavUserVi
                     fontSize = 20.sp,
                     fontWeight = FontWeight.ExtraBold
                 ),
-                modifier = Modifier.padding(horizontal = 50.dp)
+                modifier = Modifier.padding(horizontal = 55.dp)
             )
 
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
-                    .padding(horizontal = 50.dp)
+                    .padding(horizontal = 55.dp)
                     .fillMaxWidth()
             ) {
                 OutlinedTextField(

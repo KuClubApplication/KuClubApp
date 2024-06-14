@@ -49,14 +49,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.kuclubapp.DataStoreManager
-import com.example.kuclubapp.NavRoutes
-import com.example.kuclubapp.R
-import com.example.kuclubapp.viewmodel.NavUserViewModel
 import com.example.kuclubapp.IdTokenRequest
 import com.example.kuclubapp.LoginRequest
+import com.example.kuclubapp.NavRoutes
+import com.example.kuclubapp.R
 import com.example.kuclubapp.RetrofitClient
 import com.example.kuclubapp.ServerResponse
 import com.example.kuclubapp.TokenResponse
+import com.example.kuclubapp.viewmodel.NavUserViewModel
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.flow.first
 import retrofit2.Call
@@ -161,11 +161,11 @@ fun LoginScreen(navController: NavHostController,
             Button(onClick = {
                 navUserViewModel.getValidUser(userId, userPasswd) { success ->
                     if (success) {
+                        Toast.makeText(context, "사용자 인증을 위해 잠시만 기다려주세요.", Toast.LENGTH_SHORT).show()
                         navUserViewModel.setUserInfo(userId)
                         login(context, userId, userPasswd, onLoginSuccess)
                     } else {
-                        Toast.makeText(context, "아이디 또는 비밀번호가 일치하지 않습니다.", Toast.LENGTH_SHORT)
-                            .show()
+                        Toast.makeText(context, "아이디 또는 비밀번호가 일치하지 않습니다.", Toast.LENGTH_SHORT).show()
                     }
                 }
             },
