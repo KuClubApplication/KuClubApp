@@ -258,6 +258,7 @@ fun RegisterScreen(navController: NavHostController, navUserViewModel: NavUserVi
             Button(
                 onClick = {
                     randomNum = (100000..999999).random().toString()
+                    Toast.makeText(context, "이메일 전송에 10초 정도 소요됩니다.", Toast.LENGTH_SHORT).show()
                     GMailSender().sendEmail(userId, randomNum)
                 },
                 modifier = Modifier
