@@ -62,6 +62,10 @@ fun RegisterScreen(navController: NavHostController, navUserViewModel: NavUserVi
         mutableStateOf("")
     }
 
+    var userPasswdCheck by remember {
+        mutableStateOf("")
+    }
+
     var userNm by remember {
         mutableStateOf("")
     }
@@ -171,6 +175,41 @@ fun RegisterScreen(navController: NavHostController, navUserViewModel: NavUserVi
 
             if (!passwordRegex.matches(userPasswd)) {
                 Text("비밀번호는 최소 6자 이상이어야 합니다.", color = Color.Red,
+                    modifier = Modifier.padding(horizontal = 10.dp))
+            }
+        }
+
+        Column(
+            modifier = Modifier.padding(10.dp),
+            verticalArrangement = Arrangement.spacedBy(4.dp)
+        ) {
+            Text(
+                "비밀번호 확인",
+                style = TextStyle(
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.ExtraBold
+                )
+            )
+
+            OutlinedTextField(
+                value = userPasswdCheck?:"",
+                onValueChange = { userPasswdCheck = it },
+                label = { Text("비밀번호 입력") },
+                leadingIcon = {
+                    Icon(
+                        imageVector = ImageVector.vectorResource(id = R.drawable.baseline_lock_outline_24),
+                        contentDescription = "pw_icon"
+                    )
+                },
+                visualTransformation = PasswordVisualTransformation(),
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Password,
+                    imeAction = ImeAction.Next),
+                modifier = Modifier.padding(10.dp)
+            )
+
+            if (userPasswd != userPasswdCheck) {
+                Text("입력한 비밀번호가 일치하지 않습니다.", color = Color.Red,
                     modifier = Modifier.padding(horizontal = 10.dp))
             }
         }
@@ -332,6 +371,9 @@ fun RegisterScreen(navController: NavHostController, navUserViewModel: NavUserVi
                 onClick = {
                     if (!passwordRegex.matches(userPasswd)) {
                         Toast.makeText(context, "비밀번호는 최소 6자 이상이어야 합니다.", Toast.LENGTH_SHORT).show()
+                    }
+                    else if (userPasswd != userPasswdCheck) {
+                        Toast.makeText(context, "비밀번호가 서로 일치하지 않습니다.", Toast.LENGTH_SHORT).show()
                     }
                     else if (userAuthNum == randomNum) {
                         navUserViewModel.insertUser(user)
