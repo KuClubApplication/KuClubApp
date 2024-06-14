@@ -305,6 +305,7 @@ fun RegisterScreen(navController: NavHostController, navUserViewModel: NavUserVi
                         text = { Text(major) },
                         onClick = {
                             selectedMajor = major
+                            userMajor = major
                             expanded = false
                         }
                     )
