@@ -52,6 +52,12 @@ fun SettingScreen(navController: NavController, navUserViewModel: NavUserViewMod
     var notificationsEnabled by remember { mutableStateOf(permissionState.status.isGranted) }
     val prevPermissionState = remember { mutableStateOf(permissionState.status.isGranted) }
 
+//    val launcher = rememberLauncherForActivityResult(
+//        contract = ActivityResultContracts.StartActivityForResult()
+//    ) {
+//        notificationsEnabled = permissionState.status.isGranted
+//    }
+
     LaunchedEffect(permissionState.status.isGranted) {
         notificationsEnabled = permissionState.status.isGranted
     }
@@ -82,6 +88,7 @@ fun SettingScreen(navController: NavController, navUserViewModel: NavUserViewMod
                 putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
             }
             context.startActivity(intent)
+//            launcher.launch(intent)
         }
         Spacer(modifier = Modifier.padding(vertical = 5.dp))
         CustomerSupport(navController)
