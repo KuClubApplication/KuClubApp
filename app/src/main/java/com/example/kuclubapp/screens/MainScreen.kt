@@ -96,8 +96,7 @@ fun MainScreen(navController: NavHostController, navUserViewModel: NavUserViewMo
                     startDestination = startDestination
                 ) {
                     composable(NavRoutes.Login.route) {
-                        //LoginScreen(navController, navUserViewModel, onLoginSuccess)
-                        ClubListScreen(navController,navClubViewModel)
+                        LoginScreen(navController, navUserViewModel, onLoginSuccess)
                     }
 
                     composable(NavRoutes.Register.route) {
