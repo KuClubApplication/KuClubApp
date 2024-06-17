@@ -96,7 +96,8 @@ fun MainScreen(navController: NavHostController, navUserViewModel: NavUserViewMo
                     startDestination = startDestination
                 ) {
                     composable(NavRoutes.Login.route) {
-                        LoginScreen(navController, navUserViewModel, onLoginSuccess)
+                        //LoginScreen(navController, navUserViewModel, onLoginSuccess)
+                        ClubListScreen(navController,navClubViewModel)
                     }
 
                     composable(NavRoutes.Register.route) {
@@ -108,7 +109,7 @@ fun MainScreen(navController: NavHostController, navUserViewModel: NavUserViewMo
                     }
 
                     composable(NavRoutes.ClubList.route) {
-                        ClubListScreen(navController)
+                        ClubListScreen(navController,navClubViewModel)
                     }
 
                     composable(NavRoutes.Setting.route) {
@@ -142,8 +143,14 @@ fun MainScreen(navController: NavHostController, navUserViewModel: NavUserViewMo
                     composable(NavRoutes.Alarm.route) {
                         AlarmScreen(navController, navUserViewModel)
                     }
-                    composable(NavRoutes.ClubDetail.route) {
-                        ClubDetailScreen(navController)
+                    composable(
+                        route = NavRoutes.ClubDetail.route,
+                        arguments = listOf(navArgument("club") { type = NavType.StringType })
+                    ) { backStackEntry ->
+                        val clubJson = backStackEntry.arguments?.getString("club")
+                        if (clubJson != null) {
+                            ClubDetailScreen(navController,club = clubJson)
+                        }
                     }
                     composable(NavRoutes.webView.route) {
                         openWebView("https://www.instagram.com/newjeans_official/")

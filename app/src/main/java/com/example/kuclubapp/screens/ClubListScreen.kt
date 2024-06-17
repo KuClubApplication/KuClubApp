@@ -24,6 +24,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -36,32 +38,33 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.kuclubapp.NavRoutes
 import com.example.kuclubapp.R
 import com.example.kuclubapp.data.ClubItem
+import com.example.kuclubapp.firebaseDB.Clubs
+import com.example.kuclubapp.viewmodel.NavClubViewModel
 import com.example.kuclubapp.viewmodel.NavUserViewModel
 import com.example.kuclubapp.viewmodel.UserRepository
 import com.example.kuclubapp.viewmodel.UserViewModelFactory
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.google.gson.Gson
 
 @Composable
-fun ClubListScreen(navController:NavHostController) {
+fun ClubListScreen(navController:NavHostController,navClubViewModel:NavClubViewModel) {
 
     
     val context = LocalContext.current
-
+    val clubItems by navClubViewModel.clubs.observeAsState(emptyList())
     Column (
         modifier = Modifier.fillMaxSize().background(Color(0xFFD9FDE8).copy(alpha = 0.6f))
     ) {
-        val clubItems = listOf(
-            ClubItem(R.drawable.konkuk_logo, "중앙동아리", "목방", 13),
-            ClubItem(R.drawable.konkuk_logo, "중앙동아리", "목방", 13),
-            ClubItem(R.drawable.konkuk_logo, "중앙동아리", "목방", 13),
-        ) //임시 더미데이터
+        navClubViewModel.getAllClubs() // Observe the LiveData
+
         ClubList(clubItems = clubItems, navController = navController)
 
     }
@@ -70,7 +73,7 @@ fun ClubListScreen(navController:NavHostController) {
 
 
 @Composable
-fun ClubList(clubItems: List<ClubItem>, navController: NavHostController) {
+fun ClubList(clubItems: List<Clubs>, navController: NavHostController) {
     LazyColumn {
         itemsIndexed(clubItems) { index, club ->
             val topPadding = if (index == 0) 31.dp else 15.dp
@@ -80,7 +83,9 @@ fun ClubList(clubItems: List<ClubItem>, navController: NavHostController) {
 }
 
 @Composable
-fun ClubListItem(club: ClubItem, topPadding: Dp,navController: NavHostController) {
+fun ClubListItem(club: Clubs, topPadding: Dp,navController: NavHostController) {
+    val gson = Gson()
+    val clubJson = gson.toJson(club)
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -90,11 +95,11 @@ fun ClubListItem(club: ClubItem, topPadding: Dp,navController: NavHostController
             .clip(RoundedCornerShape(20.dp))
             .background(Color.White)
             .clickable {
-                navController.navigate(NavRoutes.ClubDetail.route)
+                navController.navigate("ClubDetail/${clubJson}")
             }
     ) {
         Image(
-            painter = painterResource(id = club.imageRes),
+            painter = painterResource(id = R.drawable.konkuk_logo),
             contentDescription = null,
             modifier = Modifier
                 .size(78.dp)
@@ -104,11 +109,11 @@ fun ClubListItem(club: ClubItem, topPadding: Dp,navController: NavHostController
         )
         Column(modifier = Modifier.weight(1f).align(Alignment.CenterVertically)) {
             Text(
-                text = club.category, fontSize = 16.sp,
+                text = club.clubCategory, fontSize = 16.sp,
                 color = Color.Gray
             )
             Text(
-                text = club.name,fontSize = 20.sp,
+                text = club.clubName,fontSize = 20.sp,
                 color = Color.Black
             )
         }
@@ -123,7 +128,7 @@ fun ClubListItem(club: ClubItem, topPadding: Dp,navController: NavHostController
                 modifier = Modifier.size(24.dp).padding(end = 4.dp)
             )
             Text(
-                text = "${club.likes} likes",
+                text = "${club.clubLikes} likes",
                 color = Color.Black, fontSize = 14.sp, fontWeight = FontWeight.Bold ,
                 modifier = Modifier
             )

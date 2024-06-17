@@ -13,6 +13,8 @@ sealed class NavRoutes(val route: String) {
     object NoticeList : NavRoutes("NoticeList")
     object NoticeDetail : NavRoutes("NoticeDetail/{noticeNum}")
     object Alarm : NavRoutes("Alarm")
-    object ClubDetail : NavRoutes("ClubDetail")
+    object ClubDetail : NavRoutes("ClubDetail/{club}"){
+        fun createRoute(club: String) = "club_detail/$club"
+    }
     object webView : NavRoutes("webView")
 }

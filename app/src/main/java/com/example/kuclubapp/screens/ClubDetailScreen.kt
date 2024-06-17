@@ -44,35 +44,16 @@ import androidx.navigation.NavHostController
 import com.example.kuclubapp.NavRoutes
 import com.example.kuclubapp.data.ClubDetails
 import com.example.kuclubapp.R
+import com.example.kuclubapp.firebaseDB.Clubs
+import com.example.kuclubapp.viewmodel.NavClubViewModel
+import com.google.gson.Gson
 import java.lang.reflect.Member
 
 @Composable
-fun ClubDetailScreen(navController: NavHostController) {
+fun ClubDetailScreen(navController: NavHostController,club : String) {
     //추후에는 인자로 객체 전달 받기로 수정
-    val clubDetails = ClubDetails(
-        name = "GDSC Konkuk",
-        imageRes = R.drawable.konkuk_logo,
-        category = "코딩/개발",
-        type = "단과 동아리",
-        president = "이현우",
-        contact = "010-xxxx-xxxx",
-        foundingDate = "2023-xx-xx",
-        instagram = "Instagram",
-        introduction = "GDSC(Google Developer Student Clubs)는 ...GDSC(Google Developer Student Clubs)는 ...GDSC(Google Developer Student Clubs)는 ...GDSC(Google Developer Student Clubs)는 ...GDSC(Google Developer Student Clubs)는 ...GDSC(Google Developer Student Clubs)는 ...",
-        activities = listOf("정기 모임", "신입생 프로젝트", "Google Solution Challenge", "학술 공유회"),
-        recruitment = " GDSC Konkuk Core Member 지원 자격\n"+
-            "1. 공대생이어야 함\n"+
-            "2. GDSC 활동에 적극적으로 참여할 수 있는 사람\n"+
-            "GDSC Konkuk 모집 분야\n"+
-            "- Developer Relations\n"+
-            "- UX/UI Designer\n"+
-            "- Android\n"+
-            "- iOS\n"+
-            "- Flutter\n"+
-            "- Backend\n"+
-            "- Web Frontend\n"+
-            "- AI/ML Engineer"
-    )
+    val gson = Gson()
+    val clubDetails = gson.fromJson(club, Clubs::class.java)
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
@@ -85,9 +66,9 @@ fun ClubDetailScreen(navController: NavHostController) {
                     .padding(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(text = clubDetails.name, fontWeight = FontWeight.ExtraBold, fontSize = 27.sp,modifier = Modifier.padding(top = 15.dp))
+                Text(text = clubDetails.clubName, fontWeight = FontWeight.ExtraBold, fontSize = 27.sp,modifier = Modifier.padding(top = 15.dp))
                 Image(
-                    painter = painterResource(id = clubDetails.imageRes),
+                    painter = painterResource(id = R.drawable.konkuk_logo),
                     contentDescription = null,
                     modifier = Modifier
                         .size(180.dp)
@@ -95,8 +76,8 @@ fun ClubDetailScreen(navController: NavHostController) {
                         .clip(RoundedCornerShape(200.dp)),
                     contentScale = ContentScale.Crop
                 )
-                Text(text = clubDetails.category,  color = Color.Gray, fontSize = 16.sp,fontWeight = FontWeight.Bold)
-                Text(text = clubDetails.type,  color = Color.Gray,fontSize = 16.sp,fontWeight = FontWeight.Bold)
+                Text(text = clubDetails.clubCategory,  color = Color.Gray, fontSize = 16.sp,fontWeight = FontWeight.Bold)
+                Text(text = clubDetails.clubCategory,  color = Color.Gray,fontSize = 16.sp,fontWeight = FontWeight.Bold)
             }
         }
 
@@ -105,22 +86,22 @@ fun ClubDetailScreen(navController: NavHostController) {
         }
 
         item {
-            ClubIntroductionSection(clubDetails.introduction)
+            clubDetails.clubIntroduction?.let { ClubIntroductionSection(it) }
         }
 
         item {
-            ClubActivitiesSection(clubDetails.activities)
+            clubDetails.clubActivities?.let { ClubActivitiesSection(it) }
         }
 
         item {
-            ClubRecruitmentSection(clubDetails.recruitment)
+            clubDetails.clubRecruitment?.let { ClubRecruitmentSection(it) }
         }
     }
 }
 
 
 @Composable
-fun ClubInfoSection(clubDetails: ClubDetails,navController: NavHostController) {
+fun ClubInfoSection(clubDetails: Clubs,navController: NavHostController) {
     val context = LocalContext.current
     Column(
         modifier = Modifier
@@ -137,7 +118,7 @@ fun ClubInfoSection(clubDetails: ClubDetails,navController: NavHostController) {
                     modifier = Modifier.padding(start = 20.dp, top = 20.dp)
                 )
                 Text(
-                    text = clubDetails.type,
+                    text = clubDetails.clubCategory,
                     color = Color.Gray,
                     fontSize = 13.sp,
                     fontWeight = FontWeight.Bold,
@@ -176,15 +157,15 @@ fun ClubInfoSection(clubDetails: ClubDetails,navController: NavHostController) {
             .border(10.dp, Color.Black))
         Row(modifier = Modifier.fillMaxWidth().padding(start = 20.dp, end = 20.dp,bottom=12.dp), horizontalArrangement = Arrangement.SpaceBetween ) {
             Text(text = "회장", fontWeight = FontWeight.Bold, fontSize = 15.sp)
-            Text(text = clubDetails.president,fontWeight = FontWeight.Bold, fontSize = 15.sp)
+            Text(text = clubDetails.clubCategory,fontWeight = FontWeight.Bold, fontSize = 15.sp)
         }
         Row(modifier = Modifier.fillMaxWidth().padding(start = 20.dp, end = 20.dp,bottom=12.dp), horizontalArrangement = Arrangement.SpaceBetween ) {
             Text(text = "연락처", fontWeight = FontWeight.Bold, fontSize = 15.sp)
-            Text(text = clubDetails.contact,fontWeight = FontWeight.Bold, fontSize = 15.sp)
+            Text(text = clubDetails.clubCategory,fontWeight = FontWeight.Bold, fontSize = 15.sp)
         }
         Row(modifier = Modifier.fillMaxWidth().padding(start = 20.dp, end = 20.dp,bottom=12.dp), horizontalArrangement = Arrangement.SpaceBetween ) {
             Text(text = "설립일", fontWeight = FontWeight.Bold, fontSize = 15.sp)
-            Text(text = clubDetails.foundingDate,fontWeight = FontWeight.Bold, fontSize = 15.sp)
+            Text(text = clubDetails.clubCategory,fontWeight = FontWeight.Bold, fontSize = 15.sp)
         }
         Spacer(modifier = Modifier
             .fillMaxWidth()
@@ -217,7 +198,7 @@ fun ClubIntroductionSection(introduction: String) {
 }
 
 @Composable
-fun ClubActivitiesSection(activities: List<String>) {
+fun ClubActivitiesSection(activities: String) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -229,9 +210,7 @@ fun ClubActivitiesSection(activities: List<String>) {
             .padding(start = 20.dp, end = 20.dp)
             .height(1.dp)
             .border(10.dp, Color.Black))
-        activities.forEach { activity ->
-            Text(text = "- "+activity, fontSize = 14.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(start = 20.dp, end = 20.dp,top = 10.dp))
-        }
+        Text(text = "- "+activities, fontSize = 14.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(start = 20.dp, end = 20.dp,top = 10.dp))
         Spacer(modifier = Modifier
             .fillMaxWidth()
             .padding(top = 20.dp)

@@ -10,7 +10,9 @@ data class Clubs(
     var clubCategory: String,
     var clubLikes: Int? = 0,
     var clubIntroduction: String? = null,
-    var clubInsta: String? = null
+    var clubInsta: String? = null,
+    var clubActivities : String?=null,
+    var clubRecruitment : String?=null
 ){
     constructor():this(0, 0, "","","")
 }
