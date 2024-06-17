@@ -96,7 +96,6 @@ fun SettingScreen(navController: NavController, navUserViewModel: NavUserViewMod
         UserSupport(navController, navUserViewModel)
 
         Spacer(modifier = Modifier.padding(vertical = 50.dp))
-        Text("테스트용 유저 아이디: " + navUserViewModel.userId, fontSize = 20.sp)
     }
 }
 
