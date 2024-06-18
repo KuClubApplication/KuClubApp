@@ -151,8 +151,14 @@ fun MainScreen(navController: NavHostController, navUserViewModel: NavUserViewMo
                             ClubDetailScreen(navController,club = clubJson)
                         }
                     }
-                    composable(NavRoutes.webView.route) {
-                        openWebView("https://www.instagram.com/newjeans_official/")
+                    composable(
+                        route = NavRoutes.webView.route,
+                        arguments = listOf(navArgument("url") { type = NavType.StringType })
+                    ) { backStackEntry ->
+                        val url = backStackEntry.arguments?.getString("url")
+                            if (url != null) {
+                                openWebView(url)
+                            }
                     }
                     composable(NavRoutes.CategoryClubList.route) {
                         CategoryClubScreen(navController,navClubViewModel,navUserViewModel)

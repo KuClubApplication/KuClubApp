@@ -102,7 +102,6 @@ fun ClubDetailScreen(navController: NavHostController,club : String) {
 
 @Composable
 fun ClubInfoSection(clubDetails: Clubs,navController: NavHostController) {
-    val context = LocalContext.current
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -136,7 +135,7 @@ fun ClubInfoSection(clubDetails: Clubs,navController: NavHostController) {
                         .size(32.dp)
                         .padding(top = 8.dp)
                         .align(Alignment.CenterVertically).clickable {
-                            navController.navigate(NavRoutes.webView.route)
+                            navController.navigate("webView/${"www.naver.com"}")
                         }
                 )
             }
