@@ -1,6 +1,9 @@
 package com.example.kuclubapp.viewmodel
 
 import android.util.Log
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -23,6 +26,7 @@ class ClubViewModelFactory(private val repository: ClubRepository): ViewModelPro
 }
 
 class NavClubViewModel(private val repository: ClubRepository): ViewModel() {
+    var selectedClub: Clubs? by mutableStateOf(null)
     // 전체 동아리 목록
     private val _clubs = MutableLiveData<List<Clubs>>()
     val clubs: LiveData<List<Clubs>> = _clubs

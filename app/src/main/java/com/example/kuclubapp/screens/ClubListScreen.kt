@@ -82,6 +82,7 @@ fun ClubList(clubItems: List<Clubs>,navController: NavHostController,navUserView
     LazyColumn {
         itemsIndexed(clubItems) { index, club ->
             val topPadding = if (index == 0) 31.dp else 15.dp
+            Log.d("testtest1234",club.toString())
             ClubListItem(club = club, topPadding = topPadding,navController,navUserViewModel,navClubViewModel)
         }
     }
@@ -89,11 +90,8 @@ fun ClubList(clubItems: List<Clubs>,navController: NavHostController,navUserView
 
 @Composable
 fun ClubListItem(club: Clubs,topPadding: Dp,navController: NavHostController,navUserViewModel: NavUserViewModel,navClubViewModel:NavClubViewModel) {
-    val gson = Gson()
-    val clubJson = gson.toJson(club)
     val clubLikes by navClubViewModel.itemList.collectAsState(initial = emptyList())
     navClubViewModel.getAllLikedByClub()
-    Log.d("testtest",clubLikes.toString())
     var likeCount by remember{
         mutableIntStateOf(0)
     }
@@ -116,7 +114,8 @@ fun ClubListItem(club: Clubs,topPadding: Dp,navController: NavHostController,nav
             .clip(RoundedCornerShape(20.dp))
             .background(Color.White)
             .clickable {
-                navController.navigate("ClubDetail/${clubJson}")
+                navClubViewModel.selectedClub = club
+                navController.navigate("ClubDetail")
             }
     ) {
         Image(
@@ -144,7 +143,7 @@ fun ClubListItem(club: Clubs,topPadding: Dp,navController: NavHostController,nav
                 if(!isUserLiked){
                     navClubViewModel.insertLiked(userId,club.clubId)
                     isUserLiked = true
-                }
+                     }
                 else{
                     navClubViewModel.deleteLiked(userId,club.clubId)
                     isUserLiked = false

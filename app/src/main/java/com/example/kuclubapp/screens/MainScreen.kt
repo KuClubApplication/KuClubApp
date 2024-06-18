@@ -2,6 +2,7 @@ package com.example.kuclubapp.screens
 
 import CategoryScreen
 import android.Manifest
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -142,17 +143,14 @@ fun MainScreen(navController: NavHostController, navUserViewModel: NavUserViewMo
                     composable(NavRoutes.Alarm.route) {
                         AlarmScreen(navController, navUserViewModel)
                     }
-                    composable(
-                        route = NavRoutes.ClubDetail.route,
-                        arguments = listOf(navArgument("club") { type = NavType.StringType })
-                    ) { backStackEntry ->
-                        val clubJson = backStackEntry.arguments?.getString("club")
-                        if (clubJson != null) {
-                            ClubDetailScreen(navController,club = clubJson)
-                        }
+                    composable(route = NavRoutes.ClubDetail.route) {
+                        ClubDetailScreen(navController,navClubViewModel)
                     }
-                    composable(NavRoutes.webView.route) {
-                        openWebView("https://www.instagram.com/newjeans_official/")
+                    composable(route = NavRoutes.webView.route) {
+                        openWebView(navClubViewModel)
+                    }
+                    composable(NavRoutes.CategoryClubList.route) {
+                        CategoryClubScreen(navController,navClubViewModel,navUserViewModel)
                     }
                 }
             }
