@@ -37,4 +37,5 @@ class ClubRepository(private val firebaseDB: FirebaseDatabase) {
     suspend fun getAllLiked(userId:String, onResult: (List<String>) -> Unit){
         UserLikedClubDao.getAllLiked(userId, onResult)
     }
+    fun getAllLikedClub() = UserLikedClubDao.getAllLikedByClub()
 }
