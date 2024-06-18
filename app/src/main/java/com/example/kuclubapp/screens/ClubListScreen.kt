@@ -1,5 +1,6 @@
 package com.example.kuclubapp.screens
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -24,8 +25,13 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -46,6 +52,7 @@ import com.example.kuclubapp.NavRoutes
 import com.example.kuclubapp.R
 import com.example.kuclubapp.data.ClubItem
 import com.example.kuclubapp.firebaseDB.Clubs
+import com.example.kuclubapp.firebaseDB.UserLikedClub
 import com.example.kuclubapp.viewmodel.NavClubViewModel
 import com.example.kuclubapp.viewmodel.NavUserViewModel
 import com.example.kuclubapp.viewmodel.UserRepository
@@ -55,37 +62,51 @@ import com.google.firebase.ktx.Firebase
 import com.google.gson.Gson
 
 @Composable
-fun ClubListScreen(navController:NavHostController,navClubViewModel:NavClubViewModel) {
+fun ClubListScreen(navController:NavHostController,navClubViewModel:NavClubViewModel,navUserViewModel: NavUserViewModel) {
 
     
     val context = LocalContext.current
     val clubItems by navClubViewModel.clubs.observeAsState(emptyList())
+
     Column (
         modifier = Modifier.fillMaxSize().background(Color(0xFFD9FDE8).copy(alpha = 0.6f))
     ) {
         navClubViewModel.getAllClubs() // Observe the LiveData
 
-        ClubList(clubItems = clubItems, navController = navController)
+        ClubList(clubItems = clubItems, navController = navController,navUserViewModel,navClubViewModel)
 
     }
 }
-
-
-
 @Composable
-fun ClubList(clubItems: List<Clubs>, navController: NavHostController) {
+fun ClubList(clubItems: List<Clubs>,navController: NavHostController,navUserViewModel: NavUserViewModel,navClubViewModel:NavClubViewModel) {
     LazyColumn {
         itemsIndexed(clubItems) { index, club ->
             val topPadding = if (index == 0) 31.dp else 15.dp
-            ClubListItem(club = club, topPadding = topPadding,navController)
+            ClubListItem(club = club, topPadding = topPadding,navController,navUserViewModel,navClubViewModel)
         }
     }
 }
 
 @Composable
-fun ClubListItem(club: Clubs, topPadding: Dp,navController: NavHostController) {
+fun ClubListItem(club: Clubs,topPadding: Dp,navController: NavHostController,navUserViewModel: NavUserViewModel,navClubViewModel:NavClubViewModel) {
     val gson = Gson()
     val clubJson = gson.toJson(club)
+    val clubLikes by navClubViewModel.itemList.collectAsState(initial = emptyList())
+    navClubViewModel.getAllLikedByClub()
+    Log.d("testtest",clubLikes.toString())
+    var likeCount by remember{
+        mutableIntStateOf(0)
+    }
+    likeCount = countLikes(club.clubId, clubLikes)
+
+    var userId = navUserViewModel.userId?:""    // userId에 @ 같이 있어서 없앰
+    if (userId.contains("@")){
+        userId = userId.split("@")[0]
+    }
+    var isUserLiked by remember{
+        mutableStateOf(true)
+    }
+    isUserLiked = isUserLikedClub(club.clubId, userId, clubLikes)
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -119,21 +140,37 @@ fun ClubListItem(club: Clubs, topPadding: Dp,navController: NavHostController) {
         }
         Spacer(modifier = Modifier.weight(1f))
         Row(
-            modifier = Modifier.align(Alignment.Bottom).padding(bottom = 10.dp, end = 15.dp)
+            modifier = Modifier.align(Alignment.Bottom).padding(bottom = 10.dp, end = 15.dp).clickable {
+                if(!isUserLiked){
+                    navClubViewModel.insertLiked(userId,club.clubId)
+                    isUserLiked = true
+                }
+                else{
+                    navClubViewModel.deleteLiked(userId,club.clubId)
+                    isUserLiked = false
+                }
+            }
         ) {
             Icon(
-                painter = painterResource(id = R.drawable.icon_heart),
+                painter = painterResource(
+                    id = if (isUserLiked) R.drawable.icon_heart else R.drawable.ic_empty_heart
+                ),
                 contentDescription = null,
                 tint = Color.Red,
                 modifier = Modifier.size(24.dp).padding(end = 4.dp)
             )
             Text(
-                text = "${club.clubLikes} likes",
+                text = "$likeCount likes",
                 color = Color.Black, fontSize = 14.sp, fontWeight = FontWeight.Bold ,
                 modifier = Modifier
             )
         }
     }
 }
-
+fun countLikes(clubId: Int, likes: List<UserLikedClub>): Int {
+    return likes.count { it.clubId == clubId }
+}
+fun isUserLikedClub(clubId: Int, userId: String, likes: List<UserLikedClub>): Boolean {
+    return likes.any { it.clubId == clubId && it.userId == userId }
+}
 

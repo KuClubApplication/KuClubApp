@@ -1,5 +1,6 @@
 package com.example.kuclubapp.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,6 +9,8 @@ import androidx.lifecycle.viewModelScope
 import com.example.kuclubapp.firebaseDB.Clubs
 import com.example.kuclubapp.firebaseDB.Notice
 import com.example.kuclubapp.firebaseDB.UserLikedClub
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class ClubViewModelFactory(private val repository: ClubRepository): ViewModelProvider.Factory{
@@ -26,6 +29,9 @@ class NavClubViewModel(private val repository: ClubRepository): ViewModel() {
     // 관심 동아리 목록
     private val _clubLiked = MutableLiveData<List<Clubs>>()
     val clubLiked: LiveData<List<Clubs>> = _clubLiked
+    // 동아리에 좋아요 수
+    private var _itemList = MutableStateFlow<List<UserLikedClub>>(emptyList())
+    val itemList = _itemList.asStateFlow()
 
     // 전체 동아리 접근
     fun insertClub(club: Clubs){
@@ -67,8 +73,8 @@ class NavClubViewModel(private val repository: ClubRepository): ViewModel() {
             repository.insertLiked(userLikedClub)
         }
     }
-    fun deleteLiked(userId:String, club:Clubs){
-        val userLikedClub =UserLikedClub(club.clubId, userId)
+    fun deleteLiked(userId:String, clubId:Int){
+        val userLikedClub =UserLikedClub(clubId, userId)
         viewModelScope.launch {
             repository.deleteLiked(userLikedClub)
         }
@@ -94,6 +100,18 @@ class NavClubViewModel(private val repository: ClubRepository): ViewModel() {
                         }
                     }
                 }
+            }
+        }
+    }
+    fun getAllLikedByClub(){
+        val clubLiked = mutableListOf<UserLikedClub>()
+        viewModelScope.launch {
+            repository.getAllLikedClub().collect { it -> // UserLikedClub 리스트 받아옴
+                it.forEach {
+                    clubLiked.add(it)
+                }
+                Log.d("testtest1",it.toString())
+                _itemList.value = clubLiked
             }
         }
     }

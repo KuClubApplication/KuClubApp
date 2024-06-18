@@ -6,24 +6,18 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.values
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 
 class UserLikedClubDao(private val firebaseDB:FirebaseDatabase) {
     suspend fun insertLiked(userLikedClub: UserLikedClub){
         var table = firebaseDB.getReference("KuclubDB/UserLikedClub")
-
-        val liked = table.push().setValue(userLikedClub).
-        addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                Log.d("Firebase", "ClubLiked added successfully")
-            } else {
-                Log.e("Firebase", "Failed to add clubLiked", task.exception)
-            }
-        }
+        table.child(userLikedClub.clubId.toString()+userLikedClub.userId).setValue(userLikedClub)
     }
     suspend fun deleteLiked(userLikedClub: UserLikedClub){
         val table = firebaseDB.getReference("KuclubDB/UserLikedClub")
-        val query = table.orderByChild("userId").equalTo(userLikedClub.userId).ref
-        query.orderByChild("clubId").equalTo(userLikedClub.clubId.toString()).ref.removeValue()
+        table.child(userLikedClub.clubId.toString()+userLikedClub.userId).removeValue()
     }
 
     suspend fun getAllLiked(userId:String, onResult: (List<String>) -> Unit) {  // userId를 String으로 받아서 해당하는 clubId를 String으로 반환
@@ -45,4 +39,44 @@ class UserLikedClubDao(private val firebaseDB:FirebaseDatabase) {
             }
         })
     }
+//    suspend fun getAllLikedByClub(onResult: (List<UserLikedClub>) -> Unit) {
+//        val club = mutableListOf<UserLikedClub>()
+//        val table = firebaseDB.getReference("KuclubDB/UserLikedClub")
+//        table.addListenerForSingleValueEvent(object : ValueEventListener {
+//            override fun onDataChange(dataSnapshot: DataSnapshot) {
+//                for (userLikedClubSnapshot in dataSnapshot.children) {
+//                    val userLikedClubId = userLikedClubSnapshot.getValue(UserLikedClub::class.java)
+//                    userLikedClubId?.let { club.add(it) }
+//                    Log.d("Insert Club","리스트가 업데이트 되었습니다"+userLikedClubId.toString())
+//                }
+//                onResult(club)
+//            }
+//
+//            override fun onCancelled(databaseError: DatabaseError) {
+//                onResult(emptyList())
+//            }
+//        })
+//    }
+    fun getAllLikedByClub(): Flow<List<UserLikedClub>> = callbackFlow {
+        val table = firebaseDB.getReference("KuclubDB/UserLikedClub")
+        val listener = object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val itemList = mutableListOf<UserLikedClub>()
+                for (itemSnapshot in snapshot.children) {
+                    val item = itemSnapshot.getValue(UserLikedClub::class.java)
+                    item?.let { itemList.add(it) }
+                    Log.d("testtest1",item.toString())
+                }
+                trySend(itemList)
+            }
+            override fun onCancelled(error: DatabaseError) {
+                close(error.toException())
+            }
+        }
+        table.addListenerForSingleValueEvent(listener)
+        awaitClose {
+            table.removeEventListener(listener)
+        }
+    }
+
 }
