@@ -109,7 +109,7 @@ fun ClubInfoSection(clubDetails: Clubs,navController: NavHostController) {
             .clip(RoundedCornerShape(15.dp, 15.dp, 0.dp, 0.dp))
             .background(Color.White),
     ) {
-        Row(modifier = Modifier.fillMaxWidth()){
+        Row(modifier = Modifier.fillMaxWidth(),horizontalArrangement = Arrangement.SpaceBetween){
             Column {
                 Text(
                     text = "정보",
@@ -125,28 +125,21 @@ fun ClubInfoSection(clubDetails: Clubs,navController: NavHostController) {
                     modifier = Modifier.padding(start = 20.dp)
                 )
             }
-            Spacer(modifier = Modifier.width(180.dp))
-            Icon(
-                painter = painterResource(id = R.drawable.icon_instagram),
-                contentDescription = null,
-                tint = Color.Unspecified,
-                modifier = Modifier
-                    .size(32.dp)
-                    .padding(top = 8.dp)
-                    .align(Alignment.CenterVertically).
-                    clickable {
-                        navController.navigate(NavRoutes.webView.route)
-                    }
-            )
-            Icon(
-                painter = painterResource(id = R.drawable.icon_everytime),
-                contentDescription = null,
-                tint = Color.Unspecified,
-                modifier = Modifier
-                    .size(32.dp)
-                    .padding(start = 10.dp, top = 8.dp)
-                    .align(Alignment.CenterVertically)
-            )
+            Row(modifier = Modifier
+                .padding(end = 20.dp)
+                .align(Alignment.CenterVertically)) {
+                Icon(
+                    painter = painterResource(id = R.drawable.icon_instagram),
+                    contentDescription = null,
+                    tint = Color.Unspecified,
+                    modifier = Modifier
+                        .size(32.dp)
+                        .padding(top = 8.dp)
+                        .align(Alignment.CenterVertically).clickable {
+                            navController.navigate(NavRoutes.webView.route)
+                        }
+                )
+            }
 
 
         }

@@ -17,4 +17,6 @@ sealed class NavRoutes(val route: String) {
         fun createRoute(club: String) = "club_detail/$club"
     }
     object webView : NavRoutes("webView")
+
+    object CategoryClubList : NavRoutes("CategoryClubList")
 }

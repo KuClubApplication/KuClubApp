@@ -154,6 +154,9 @@ fun MainScreen(navController: NavHostController, navUserViewModel: NavUserViewMo
                     composable(NavRoutes.webView.route) {
                         openWebView("https://www.instagram.com/newjeans_official/")
                     }
+                    composable(NavRoutes.CategoryClubList.route) {
+                        CategoryClubScreen(navController,navClubViewModel,navUserViewModel)
+                    }
                 }
             }
 
