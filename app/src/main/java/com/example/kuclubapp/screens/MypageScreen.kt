@@ -207,19 +207,19 @@ fun likedClubUI(clubLikedList:List<Clubs>) {
     }
 }
 fun testInsert(userId: String, navClubViewModel:NavClubViewModel){
-    val club1 = Clubs(1, 0,
-        "no.1 Name", "noClassification",
-        "noCategory"
-    )
-    val club2 = Clubs(2, 0,
-        "no.2 Name", "noClassification",
-        "noCategory"
-    )
-    navClubViewModel.insertClub(club1)
-    navClubViewModel.insertClub(club2)
-    navClubViewModel.deleteLiked(userId, club1)
-    navClubViewModel.deleteLiked(userId, club2)
-    navClubViewModel.insertLiked(userId, 1)
-    navClubViewModel.insertLiked(userId, 2)
-    navClubViewModel.getAllLiked(userId)
+//    val club1 = Clubs(1, 0,
+//        "no.1 Name", "noClassification",
+//        "noCategory"
+//    )
+//    val club2 = Clubs(2, 0,
+//        "no.2 Name", "noClassification",
+//        "noCategory"
+//    )
+//    navClubViewModel.insertClub(club1)
+//    navClubViewModel.insertClub(club2)
+//    navClubViewModel.deleteLiked(userId, club1)
+//    navClubViewModel.deleteLiked(userId, club2)
+//    navClubViewModel.insertLiked(userId, 1)
+//    navClubViewModel.insertLiked(userId, 2)
+//    navClubViewModel.getAllLiked(userId)
 }
