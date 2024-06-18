@@ -107,7 +107,7 @@ fun ClubListItem(club: Clubs, topPadding: Dp,navController: NavHostController) {
                 .clip(RoundedCornerShape(200.dp)).align(Alignment.CenterVertically),
             contentScale = ContentScale.Crop
         )
-        Column(modifier = Modifier.weight(1f).align(Alignment.CenterVertically)) {
+        Column(modifier = Modifier.align(Alignment.CenterVertically)) {
             Text(
                 text = club.clubCategory, fontSize = 16.sp,
                 color = Color.Gray
