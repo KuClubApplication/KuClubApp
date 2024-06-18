@@ -41,6 +41,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat.startActivity
 import androidx.navigation.NavHostController
+import coil.compose.AsyncImage
 import com.example.kuclubapp.NavRoutes
 import com.example.kuclubapp.data.ClubDetails
 import com.example.kuclubapp.R
@@ -50,10 +51,9 @@ import com.google.gson.Gson
 import java.lang.reflect.Member
 
 @Composable
-fun ClubDetailScreen(navController: NavHostController,club : String) {
+fun ClubDetailScreen(navController: NavHostController,navClubViewModel: NavClubViewModel) {
     //추후에는 인자로 객체 전달 받기로 수정
-    val gson = Gson()
-    val clubDetails = gson.fromJson(club, Clubs::class.java)
+    val clubDetails = navClubViewModel.selectedClub
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
@@ -66,35 +66,51 @@ fun ClubDetailScreen(navController: NavHostController,club : String) {
                     .padding(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(text = clubDetails.clubName, fontWeight = FontWeight.ExtraBold, fontSize = 27.sp,modifier = Modifier.padding(top = 15.dp))
-                Image(
-                    painter = painterResource(id = R.drawable.konkuk_logo),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(180.dp)
-                        .padding(12.dp)
-                        .clip(RoundedCornerShape(200.dp)),
-                    contentScale = ContentScale.Crop
-                )
-                Text(text = clubDetails.clubCategory,  color = Color.Gray, fontSize = 16.sp,fontWeight = FontWeight.Bold)
-                Text(text = clubDetails.clubCategory,  color = Color.Gray,fontSize = 16.sp,fontWeight = FontWeight.Bold)
+                if (clubDetails != null) {
+                    Text(text = clubDetails.clubName, fontWeight = FontWeight.ExtraBold, fontSize = 27.sp,modifier = Modifier.padding(top = 15.dp))
+                }
+                if (clubDetails != null) {
+                    AsyncImage(
+                        model = clubDetails.clubImgUrl,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(78.dp)
+                            .padding(12.dp)
+                            .clip(RoundedCornerShape(200.dp)),
+                        contentScale = ContentScale.Crop
+                    )
+                }
+                if (clubDetails != null) {
+                    Text(text = clubDetails.clubCategoryId,  color = Color.Gray, fontSize = 16.sp,fontWeight = FontWeight.Bold)
+                }
+                if (clubDetails != null) {
+                    Text(text = clubDetails.clubCategory,  color = Color.Gray,fontSize = 16.sp,fontWeight = FontWeight.Bold)
+                }
             }
         }
 
         item {
-            ClubInfoSection(clubDetails,navController)
+            if (clubDetails != null) {
+                ClubInfoSection(clubDetails,navController)
+            }
         }
 
         item {
-            clubDetails.clubIntroduction?.let { ClubIntroductionSection(it) }
+            if (clubDetails != null) {
+                clubDetails.clubIntroduction?.let { ClubIntroductionSection(it) }
+            }
         }
 
         item {
-            clubDetails.clubActivities?.let { ClubActivitiesSection(it) }
+            if (clubDetails != null) {
+                clubDetails.clubActivities?.let { ClubActivitiesSection(it) }
+            }
         }
 
         item {
-            clubDetails.clubRecruitment?.let { ClubRecruitmentSection(it) }
+            if (clubDetails != null) {
+                clubDetails.clubRecruitment?.let { ClubRecruitmentSection(it) }
+            }
         }
     }
 }
@@ -135,7 +151,7 @@ fun ClubInfoSection(clubDetails: Clubs,navController: NavHostController) {
                         .size(32.dp)
                         .padding(top = 8.dp)
                         .align(Alignment.CenterVertically).clickable {
-                            navController.navigate("webView/${"www.naver.com"}")
+                            navController.navigate("webView")
                         }
                 )
             }
@@ -149,15 +165,15 @@ fun ClubInfoSection(clubDetails: Clubs,navController: NavHostController) {
             .border(10.dp, Color.Black))
         Row(modifier = Modifier.fillMaxWidth().padding(start = 20.dp, end = 20.dp,bottom=12.dp), horizontalArrangement = Arrangement.SpaceBetween ) {
             Text(text = "회장", fontWeight = FontWeight.Bold, fontSize = 15.sp)
-            Text(text = clubDetails.clubCategory,fontWeight = FontWeight.Bold, fontSize = 15.sp)
+            clubDetails.clubPresident?.let { Text(text = it,fontWeight = FontWeight.Bold, fontSize = 15.sp) }
         }
         Row(modifier = Modifier.fillMaxWidth().padding(start = 20.dp, end = 20.dp,bottom=12.dp), horizontalArrangement = Arrangement.SpaceBetween ) {
             Text(text = "연락처", fontWeight = FontWeight.Bold, fontSize = 15.sp)
-            Text(text = clubDetails.clubCategory,fontWeight = FontWeight.Bold, fontSize = 15.sp)
+            clubDetails.clubContactNum?.let { Text(text = it,fontWeight = FontWeight.Bold, fontSize = 15.sp) }
         }
         Row(modifier = Modifier.fillMaxWidth().padding(start = 20.dp, end = 20.dp,bottom=12.dp), horizontalArrangement = Arrangement.SpaceBetween ) {
             Text(text = "설립일", fontWeight = FontWeight.Bold, fontSize = 15.sp)
-            Text(text = clubDetails.clubCategory,fontWeight = FontWeight.Bold, fontSize = 15.sp)
+            clubDetails.clubEstablishedDate?.let { Text(text = it,fontWeight = FontWeight.Bold, fontSize = 15.sp) }
         }
         Spacer(modifier = Modifier
             .fillMaxWidth()

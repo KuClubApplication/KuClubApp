@@ -7,10 +7,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
+import com.example.kuclubapp.viewmodel.NavClubViewModel
 
 @SuppressLint("SetJavaScriptEnabled")
 @Composable
-fun openWebView(url: String) {
+fun openWebView(navClubViewModel: NavClubViewModel) {
     AndroidView(
         modifier = Modifier.fillMaxSize(),
         factory = { context ->
@@ -22,7 +23,7 @@ fun openWebView(url: String) {
             }
         },
         update = { webView ->
-            webView.loadUrl(url)
+            navClubViewModel.selectedClub?.clubInsta?.let { webView.loadUrl(it) }
         }
     )
 }
