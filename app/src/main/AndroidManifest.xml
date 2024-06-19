@@ -36,6 +36,13 @@
             android:name=".SettingsActivity"
             android:label="Accessibility Settings"
             android:theme="@style/Theme.KuClubApp" />
+        <service
+            android:name="com.example.kuclubapp.FcmReceiveService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

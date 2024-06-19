@@ -118,6 +118,7 @@ fun ClubListItem(club: Clubs,topPadding: Dp,navController: NavHostController,nav
                 navClubViewModel.selectedClub = club
                 navController.navigate("ClubDetail")
             }
+
     ) {
         val defaultImageUrl = "https://firebasestorage.googleapis.com/v0/b/ku-club-management.appspot.com/o/koo.png?alt=media&token=50ed63cd-8588-46e1-9189-830dfd09ce19"
 
