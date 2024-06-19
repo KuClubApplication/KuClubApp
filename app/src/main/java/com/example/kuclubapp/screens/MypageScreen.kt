@@ -39,6 +39,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import coil.compose.AsyncImage
 import com.example.kuclubapp.R
 import com.example.kuclubapp.firebaseDB.Clubs
 import com.example.kuclubapp.viewmodel.NavClubViewModel
@@ -175,6 +176,17 @@ fun likedClubUI(userId:String,  clubLikedList:List<Clubs>, navController: NavHos
                     },
                 verticalAlignment = Alignment.Bottom
             ) {
+                val defaultImageUrl = "https://firebasestorage.googleapis.com/v0/b/ku-club-management.appspot.com/o/koo.png?alt=media&token=50ed63cd-8588-46e1-9189-830dfd09ce19"
+
+                AsyncImage(
+                    model = if (index.clubImgUrl.isNullOrEmpty()) defaultImageUrl else index.clubImgUrl,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(78.dp)
+                        .padding(12.dp)
+                        .clip(RoundedCornerShape(200.dp)).align(Alignment.CenterVertically),
+                    contentScale = ContentScale.Crop
+                )
                 Column(
                     modifier = Modifier
                         .align(Alignment.CenterVertically)
@@ -184,13 +196,14 @@ fun likedClubUI(userId:String,  clubLikedList:List<Clubs>, navController: NavHos
                     ) {
                     Text(
                         text = index.clubClassification,
-                        fontSize = 15.sp,
+                        fontSize = 16.sp,
                         modifier = Modifier
-                            .padding(start = 15.dp,)
+                            .padding(start = 15.dp,),
+                        color = Color.Gray
                     )
                     Text(
                         text = index.clubName,
-                        fontSize = 25.sp,
+                        fontSize = 20.sp,
                         modifier = Modifier.padding(start = 15.dp, top = 10.dp, bottom = 10.dp)
                     )
                 }
