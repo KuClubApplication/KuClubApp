@@ -164,7 +164,7 @@ fun likedClubUI(userId:String,  clubLikedList:List<Clubs>, navController: NavHos
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(5.dp)
+                    .padding(top = 15.dp, start = 22.dp,end = 20.dp)
                     .background(Color.White, RoundedCornerShape(10.dp))
                     .border(2.dp, Color(0xFFD0CCCC), shape = RoundedCornerShape(20.dp))
                     .clip(RoundedCornerShape(20.dp))
@@ -218,13 +218,13 @@ fun likedClubUI(userId:String,  clubLikedList:List<Clubs>, navController: NavHos
                             contentDescription = null,
                             tint = Color.Red,
                             modifier = Modifier
-                                .size(30.dp)
+                                .size(24.dp)
                                 .padding(end = 4.dp)
                         )
                         val likeCount = countLikes(index.clubId, clubLikes)
                         Text(
                             text = "$likeCount likes",
-                            color = Color.Black, fontSize = 22.sp, fontWeight = FontWeight.Bold,
+                            color = Color.Black, fontSize = 14.sp, fontWeight = FontWeight.Bold,
                             modifier = Modifier
                         )
                     }
