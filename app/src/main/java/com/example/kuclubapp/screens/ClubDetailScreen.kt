@@ -81,10 +81,10 @@ fun ClubDetailScreen(navController: NavHostController,navClubViewModel: NavClubV
                     )
                 }
                 if (clubDetails != null) {
-                    Text(text = clubDetails.clubCategoryId,  color = Color.Gray, fontSize = 16.sp,fontWeight = FontWeight.Bold)
+                    Text(text = clubDetails.clubCategory,  color = Color.Gray, fontSize = 16.sp,fontWeight = FontWeight.Bold)
                 }
                 if (clubDetails != null) {
-                    Text(text = clubDetails.clubCategory,  color = Color.Gray,fontSize = 16.sp,fontWeight = FontWeight.Bold)
+                    Text(text = clubDetails.clubClassification,  color = Color.Gray,fontSize = 16.sp,fontWeight = FontWeight.Bold)
                 }
             }
         }
@@ -133,7 +133,7 @@ fun ClubInfoSection(clubDetails: Clubs,navController: NavHostController) {
                     modifier = Modifier.padding(start = 20.dp, top = 20.dp)
                 )
                 Text(
-                    text = clubDetails.clubCategory,
+                    text = clubDetails.clubClassification,
                     color = Color.Gray,
                     fontSize = 13.sp,
                     fontWeight = FontWeight.Bold,

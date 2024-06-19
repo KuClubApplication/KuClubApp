@@ -92,6 +92,8 @@ class NavClubViewModel(private val repository: ClubRepository): ViewModel() {
                     println(it + " ID 찾음")
                     clubIdList.add(it)
                 }
+                if (clubIdList.isEmpty())
+                    _clubLiked.value = emptyList()
                 clubIdList.forEach {
                     println(it + " ID 찾음")
                     viewModelScope.launch {
@@ -101,6 +103,7 @@ class NavClubViewModel(private val repository: ClubRepository): ViewModel() {
                                 clubLiked.add(it)
                             }
                             _clubLiked.value = clubLiked
+
                         }
                     }
                 }

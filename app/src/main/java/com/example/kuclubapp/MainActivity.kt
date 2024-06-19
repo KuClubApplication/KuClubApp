@@ -79,7 +79,6 @@ class MainActivity : ComponentActivity() {
                     }
                 }
             }
-
             MainScreen(
                 navController = navController,
                 navUserViewModel = viewModel,
