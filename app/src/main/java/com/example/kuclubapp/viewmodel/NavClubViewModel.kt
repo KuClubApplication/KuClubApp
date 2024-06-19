@@ -27,6 +27,10 @@ class ClubViewModelFactory(private val repository: ClubRepository): ViewModelPro
 
 class NavClubViewModel(private val repository: ClubRepository): ViewModel() {
     var selectedClub: Clubs? by mutableStateOf(null)
+    var selectedCategory: Int? by mutableStateOf(0)
+    // 카테고리별 동아리 목록
+    private val _categoryClubs = MutableLiveData<List<Clubs>>()
+    val categoryClubs: LiveData<List<Clubs>> = _categoryClubs
     // 전체 동아리 목록
     private val _clubs = MutableLiveData<List<Clubs>>()
     val clubs: LiveData<List<Clubs>> = _clubs
@@ -69,7 +73,13 @@ class NavClubViewModel(private val repository: ClubRepository): ViewModel() {
             }
         }
     }
-
+    fun getClubsByCategoryId(categoryId : Int){
+        viewModelScope.launch {
+            repository.getClubsByCategoryId(categoryId){
+                _categoryClubs.value = it
+            }
+        }
+    }
     // 관심 동아리 접근
     fun insertLiked(userId:String, clubId:Int){ // 현재 userId와 선택한 club을 넣으면 list에 추가됨
         val userLikedClub = UserLikedClub(clubId,userId)

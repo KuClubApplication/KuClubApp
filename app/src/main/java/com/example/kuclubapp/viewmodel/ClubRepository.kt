@@ -26,7 +26,9 @@ class ClubRepository(private val firebaseDB: FirebaseDatabase) {
     suspend fun getAllClubs(onResult:(List<Clubs>) -> Unit){
         ClubsDao.getAllClubs(onResult)
     }
-
+    suspend fun getClubsByCategoryId(categoryId:Int, onResult:(List<Clubs>) -> Unit){
+        ClubsDao.getClubsByCategory(categoryId,onResult)
+    }
     // UserLikedClub 접근
     suspend fun insertLiked(userLikedClub: UserLikedClub){
         UserLikedClubDao.insertLiked(userLikedClub)
