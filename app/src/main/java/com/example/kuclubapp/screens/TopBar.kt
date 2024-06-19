@@ -55,6 +55,7 @@ fun TopBar(navController: NavHostController) {
                             NavRoutes.NoticeDetail.route -> "상세 공지사항"
                             NavRoutes.Alarm.route -> "알림"
                             NavRoutes.ClubDetail.route -> "상세 페이지"
+                            NavRoutes.CategoryClubList.route -> "임시"
                             else -> "App"
                         },
                         fontSize = 20.sp,

@@ -57,7 +57,7 @@ fun CategoryScreen(navController: NavHostController, navUserViewModel: NavUserVi
             ) {
                 rowItems.forEach { item ->
                     CategoryCard(item, cardSize) {
-                        navController.navigate(NavRoutes.ClubList.route)
+                        navController.navigate(NavRoutes.CategoryClubList.route)
                     }
                 }
                 if (rowItems.size < 2) {

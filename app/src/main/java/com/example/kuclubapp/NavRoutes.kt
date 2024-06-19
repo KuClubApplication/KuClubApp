@@ -15,4 +15,6 @@ sealed class NavRoutes(val route: String) {
     object Alarm : NavRoutes("Alarm")
     object ClubDetail : NavRoutes("ClubDetail")
     object webView : NavRoutes("webView")
+
+    object CategoryClubList : NavRoutes("CategoryClubList")
 }
