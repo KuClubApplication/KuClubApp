@@ -17,6 +17,9 @@ class ClubRepository(private val firebaseDB: FirebaseDatabase) {
     suspend fun deleteClub(club: Clubs){
         ClubsDao.deleteClub(club.clubName)
     }
+    suspend fun updateClub(club: Clubs){
+        ClubsDao.updateClub(club)
+    }
     suspend fun searchbyClubName(clubName:String, onResult:(List<Clubs>) -> Unit){
         ClubsDao.searchbyClubName(clubName, onResult)
     }
