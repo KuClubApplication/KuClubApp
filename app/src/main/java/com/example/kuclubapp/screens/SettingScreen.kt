@@ -2,6 +2,8 @@ package com.example.kuclubapp.screens
 
 import android.content.Intent
 import android.provider.Settings
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -50,13 +52,12 @@ fun SettingScreen(navController: NavController, navUserViewModel: NavUserViewMod
     val permissionState = rememberPermissionState(
         permission = android.Manifest.permission.POST_NOTIFICATIONS)
     var notificationsEnabled by remember { mutableStateOf(permissionState.status.isGranted) }
-    val prevPermissionState = remember { mutableStateOf(permissionState.status.isGranted) }
 
-//    val launcher = rememberLauncherForActivityResult(
-//        contract = ActivityResultContracts.StartActivityForResult()
-//    ) {
-//        notificationsEnabled = permissionState.status.isGranted
-//    }
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult()
+    ) {
+        notificationsEnabled = permissionState.status.isGranted
+    }
 
     LaunchedEffect(permissionState.status.isGranted) {
         notificationsEnabled = permissionState.status.isGranted
@@ -66,8 +67,7 @@ fun SettingScreen(navController: NavController, navUserViewModel: NavUserViewMod
     DisposableEffect(lifecycleOwner) {
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_RESUME) {
-                val isGranted = permissionState.status.isGranted
-                notificationsEnabled = isGranted
+                notificationsEnabled = permissionState.status.isGranted
 
 //                if (!isGranted) {
 //                    (context as? Activity)?.finish()
@@ -87,8 +87,8 @@ fun SettingScreen(navController: NavController, navUserViewModel: NavUserViewMod
             val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).apply {
                 putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
             }
-            context.startActivity(intent)
-//            launcher.launch(intent)
+//            context.startActivity(intent)
+            launcher.launch(intent)
         }
         Spacer(modifier = Modifier.padding(vertical = 5.dp))
         CustomerSupport(navController)
@@ -129,7 +129,11 @@ fun NotificationSettings(
                         strokeWidth = strokeWidth
                     )
                 }
-                .clickable { onClick() }
+                // 임시 코드 사용 안 하는 경우 아래 코드의 주석 해제해야 됨.
+//                .clickable { onClick() }
+                // 알림 수신 권한 On -> Off로 변경시 강제 프로세스 종료 문제 발생.
+                // 임시로, 현재 권한 허용 상태가 True인 경우 알림 설정 바가 클릭 안 되게 막음.
+                .then(if (!notificationsEnabled) Modifier.clickable { onClick() } else Modifier)
         ) {
             Text(
                 text = "알림 수신 동의",
