@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
@@ -184,13 +183,14 @@ fun likedClubUI(userId:String,  clubLikedList:List<Clubs>, navController: NavHos
                     modifier = Modifier
                         .size(78.dp)
                         .padding(12.dp)
-                        .clip(RoundedCornerShape(200.dp)).align(Alignment.CenterVertically),
+                        .clip(RoundedCornerShape(200.dp))
+                        .align(Alignment.CenterVertically),
                     contentScale = ContentScale.Crop
                 )
                 Column(
                     modifier = Modifier
-                        .align(Alignment.CenterVertically)
-                        .width(250.dp),
+                        .weight(1f)
+                        .align(Alignment.CenterVertically),
                     verticalArrangement = Arrangement.Center,
 
                     ) {
@@ -198,25 +198,23 @@ fun likedClubUI(userId:String,  clubLikedList:List<Clubs>, navController: NavHos
                         text = index.clubClassification,
                         fontSize = 16.sp,
                         modifier = Modifier
-                            .padding(start = 15.dp,),
+                            .padding(start = 15.dp),
                         color = Color.Gray
                     )
                     Text(
                         text = index.clubName,
                         fontSize = 20.sp,
-                        modifier = Modifier.padding(start = 15.dp, top = 10.dp, bottom = 10.dp)
+                        modifier = Modifier.padding(start = 15.dp, top = 4.dp, bottom = 10.dp)
                     )
                 }
                 Row(
                     modifier = Modifier
-                        .fillMaxWidth()
                         .padding(end = 20.dp),
                     horizontalArrangement = Arrangement.End,
                     verticalAlignment = Alignment.Bottom
                 ) {
                     Row(
                         modifier = Modifier
-                            .align(Alignment.Bottom)
                             .padding(bottom = 10.dp, end = 15.dp)
                             .clickable {
                                 navClubViewModel.deleteLiked(userId, index.clubId)
