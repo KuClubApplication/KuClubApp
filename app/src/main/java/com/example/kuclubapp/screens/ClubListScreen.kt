@@ -65,7 +65,7 @@ import com.google.gson.Gson
 @Composable
 fun ClubListScreen(navController:NavHostController,navClubViewModel:NavClubViewModel,navUserViewModel: NavUserViewModel) {
 
-    
+
     val context = LocalContext.current
     val clubItems by navClubViewModel.clubs.observeAsState(emptyList())
 
@@ -144,7 +144,7 @@ fun ClubListItem(club: Clubs,topPadding: Dp,navController: NavHostController,nav
                 if(!isUserLiked){
                     navClubViewModel.insertLiked(userId,club.clubId)
                     isUserLiked = true
-                     }
+                }
                 else{
                     navClubViewModel.deleteLiked(userId,club.clubId)
                     isUserLiked = false
