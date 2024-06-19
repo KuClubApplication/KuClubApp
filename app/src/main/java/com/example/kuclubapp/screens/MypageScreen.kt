@@ -173,7 +173,7 @@ fun likedClubUI(userId:String,  clubLikedList:List<Clubs>, navController: NavHos
                         navClubViewModel.selectedClub = index
                         navController.navigate("ClubDetail")
                     },
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.Bottom
             ) {
                 Column(
                     modifier = Modifier
