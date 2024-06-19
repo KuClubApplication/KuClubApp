@@ -1,7 +1,12 @@
 package com.example.kuclubapp.screens
 
+import android.app.NotificationManager
+import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.provider.Settings
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -49,29 +54,28 @@ fun SettingScreen(navController: NavController, navUserViewModel: NavUserViewMod
     val context = LocalContext.current
     val permissionState = rememberPermissionState(
         permission = android.Manifest.permission.POST_NOTIFICATIONS)
-    var notificationsEnabled by remember { mutableStateOf(permissionState.status.isGranted) }
-    val prevPermissionState = remember { mutableStateOf(permissionState.status.isGranted) }
 
-//    val launcher = rememberLauncherForActivityResult(
-//        contract = ActivityResultContracts.StartActivityForResult()
-//    ) {
-//        notificationsEnabled = permissionState.status.isGranted
-//    }
+    var notificationsEnabled by remember { mutableStateOf(checkNotificationChannelStatus(context)) }
+    var alarmEnabled by remember { mutableStateOf(permissionState.status.isGranted) }
 
-    LaunchedEffect(permissionState.status.isGranted) {
-        notificationsEnabled = permissionState.status.isGranted
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult()
+    ) {
+        notificationsEnabled = checkNotificationChannelStatus(context)
+        alarmEnabled = permissionState.status.isGranted
+    }
+
+    LaunchedEffect(Unit) {
+        notificationsEnabled = checkNotificationChannelStatus(context)
+        alarmEnabled = permissionState.status.isGranted
     }
 
     val lifecycleOwner = LocalLifecycleOwner.current
     DisposableEffect(lifecycleOwner) {
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_RESUME) {
-                val isGranted = permissionState.status.isGranted
-                notificationsEnabled = isGranted
-
-//                if (!isGranted) {
-//                    (context as? Activity)?.finish()
-//                }
+                notificationsEnabled = checkNotificationChannelStatus(context)
+                alarmEnabled = permissionState.status.isGranted
             }
         }
         lifecycleOwner.lifecycle.addObserver(observer)
@@ -83,12 +87,12 @@ fun SettingScreen(navController: NavController, navUserViewModel: NavUserViewMod
     Column(
         modifier = Modifier.fillMaxSize().background(Color(0xFFD9FDE8).copy(alpha = 0.6f))
     ) {
-        NotificationSettings(notificationsEnabled) {
+        NotificationSettings(notificationsEnabled, alarmEnabled) {
             val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).apply {
                 putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
+                putExtra(Settings.EXTRA_CHANNEL_ID, "Notice_Notification")
             }
-            context.startActivity(intent)
-//            launcher.launch(intent)
+            launcher.launch(intent)
         }
         Spacer(modifier = Modifier.padding(vertical = 5.dp))
         CustomerSupport(navController)
@@ -99,9 +103,19 @@ fun SettingScreen(navController: NavController, navUserViewModel: NavUserViewMod
     }
 }
 
+fun checkNotificationChannelStatus(context: Context): Boolean {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val channel = manager.getNotificationChannel("Notice_Notification")
+        return channel?.importance != NotificationManager.IMPORTANCE_NONE
+    }
+    return true
+}
+
 @Composable
 fun NotificationSettings(
     notificationsEnabled: Boolean,
+    alarmEnabled: Boolean,
     onClick: () -> Unit
 ) {
     Column(modifier = Modifier
@@ -129,7 +143,11 @@ fun NotificationSettings(
                         strokeWidth = strokeWidth
                     )
                 }
+                // 임시 코드 사용 안 하는 경우 아래 코드의 주석 해제해야 됨.
                 .clickable { onClick() }
+                // 알림 수신 권한 On -> Off로 변경시 강제 프로세스 종료 문제 발생.
+                // 임시로, 현재 권한 허용 상태가 True인 경우 알림 설정 바가 클릭 안 되게 막음.
+//                .then(if (!notificationsEnabled) Modifier.clickable { onClick() } else Modifier)
         ) {
             Text(
                 text = "알림 수신 동의",
@@ -137,9 +155,9 @@ fun NotificationSettings(
             )
             Spacer(modifier = Modifier.weight(1f))
             Text(
-                text = if (notificationsEnabled) "ON" else "OFF",
+                text = if (notificationsEnabled && alarmEnabled) "ON" else "OFF",
                 fontWeight = FontWeight.Bold,
-                color = if (notificationsEnabled) Color(0xFF008000) else Color.Red,
+                color = if (notificationsEnabled && alarmEnabled) Color(0xFF008000) else Color.Red,
                 modifier = Modifier.padding(horizontal = 16.dp)
             )
         }

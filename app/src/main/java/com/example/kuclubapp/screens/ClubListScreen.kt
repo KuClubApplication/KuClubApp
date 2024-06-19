@@ -48,6 +48,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import coil.compose.AsyncImage
 import com.example.kuclubapp.NavRoutes
 import com.example.kuclubapp.R
 import com.example.kuclubapp.data.ClubItem
@@ -118,8 +119,8 @@ fun ClubListItem(club: Clubs,topPadding: Dp,navController: NavHostController,nav
                 navController.navigate("ClubDetail")
             }
     ) {
-        Image(
-            painter = painterResource(id = R.drawable.konkuk_logo),
+        AsyncImage(
+            model = club.clubImgUrl,
             contentDescription = null,
             modifier = Modifier
                 .size(78.dp)

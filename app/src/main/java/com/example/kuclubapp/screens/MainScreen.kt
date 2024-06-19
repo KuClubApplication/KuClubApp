@@ -117,7 +117,7 @@ fun MainScreen(navController: NavHostController, navUserViewModel: NavUserViewMo
                     }
 
                     composable(NavRoutes.Category.route) {
-                        CategoryScreen(navController, navUserViewModel)
+                        CategoryScreen(navController, navClubViewModel)
                     }
 
                     composable(NavRoutes.Mypage.route) {

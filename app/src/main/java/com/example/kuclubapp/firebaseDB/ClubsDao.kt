@@ -82,4 +82,23 @@ class ClubsDao(private val firebaseDB: FirebaseDatabase) {
             }
         })
     }
+    suspend fun getClubsByCategory(categoryId: Int, onResult: (List<Clubs>) -> Unit) {
+        val clubs = mutableListOf<Clubs>()
+        val table = firebaseDB.getReference("KuclubDB/Clubs")
+        val query = table.orderByChild("clubCategoryId").equalTo(categoryId.toDouble())
+        query.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                for (clubsSnapshot in dataSnapshot.children) {
+                    val club = clubsSnapshot.getValue(Clubs::class.java)
+                    club?.let { clubs.add(it) }
+                    Log.d("테스트", club.toString())
+                }
+                onResult(clubs)
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                onResult(emptyList())
+            }
+        })
+    }
 }

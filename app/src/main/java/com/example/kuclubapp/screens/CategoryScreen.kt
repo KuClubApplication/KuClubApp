@@ -22,21 +22,25 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.kuclubapp.NavRoutes
 import com.example.kuclubapp.R
+import com.example.kuclubapp.viewmodel.NavClubViewModel
 import com.example.kuclubapp.viewmodel.NavUserViewModel
 
-data class CategoryItem(val icon: Int, val title: String)
+data class CategoryItem(val icon: Int, val title: String,val id : Int)
 
 @Composable
-fun CategoryScreen(navController: NavHostController, navUserViewModel: NavUserViewModel) {
+fun CategoryScreen(navController: NavHostController, navClubViewModel: NavClubViewModel) {
     val categories = listOf(
-        CategoryItem(R.drawable.ball, "구기체육"),
-        CategoryItem(R.drawable.science, "자연과학"),
-        CategoryItem(R.drawable.art, "공연예술"),
-        CategoryItem(R.drawable.brush, "전시문예"),
-        CategoryItem(R.drawable.imac, "개발/코딩"),
-        CategoryItem(R.drawable.lifecycle, "봉사"),
-        CategoryItem(R.drawable.battery, "더미 데이터"),
-        CategoryItem(R.drawable.battery, "더미 데이터")
+        CategoryItem(R.drawable.science, "자연과학",1),
+        CategoryItem(R.drawable.people, "인문학술",2),
+        CategoryItem(R.drawable.art, "사회",3),
+        CategoryItem(R.drawable.lifecycle, "봉사",4),
+        CategoryItem(R.drawable.imac, "개발/코딩",5),
+        CategoryItem(R.drawable.ball, "구기체육",6),
+        CategoryItem(R.drawable.dancing, "레저무예",7),
+        CategoryItem(R.drawable.bible, "종교",8),
+        CategoryItem(R.drawable.brush, "전시문예",9),
+        CategoryItem(R.drawable.art, "공연예술",10)
+
     )
 
     val cardSize = 150.dp
@@ -57,6 +61,7 @@ fun CategoryScreen(navController: NavHostController, navUserViewModel: NavUserVi
             ) {
                 rowItems.forEach { item ->
                     CategoryCard(item, cardSize) {
+                        navClubViewModel.selectedCategory = item.id
                         navController.navigate(NavRoutes.CategoryClubList.route)
                     }
                 }
