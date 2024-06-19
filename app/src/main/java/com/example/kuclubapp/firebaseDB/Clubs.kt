@@ -4,7 +4,7 @@ import org.w3c.dom.Text
 
 data class Clubs(
     val clubId:Int,
-    val clubCategoryId:String,
+    val clubCategoryId:Int,
     var clubName: String,
     var clubClassification: String,
     var clubCategory: String,
@@ -18,5 +18,5 @@ data class Clubs(
     var clubImgUrl :String?=null,
     var clubLikes : Int?=0
 ){
-    constructor():this(0, "", "","","")
+    constructor():this(0, 0, "","","")
 }

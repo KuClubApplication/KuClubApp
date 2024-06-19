@@ -1,5 +1,6 @@
 package com.example.kuclubapp.screens
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -31,14 +32,18 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.kuclubapp.NavRoutes
 import com.example.kuclubapp.R
+import com.example.kuclubapp.firebaseDB.Clubs
 import com.example.kuclubapp.viewmodel.NavClubViewModel
 import com.example.kuclubapp.viewmodel.NavUserViewModel
 
 @Composable
 fun CategoryClubScreen(navController: NavHostController, navClubViewModel: NavClubViewModel, navUserViewModel: NavUserViewModel) {
 
-
-    val context = LocalContext.current
+    val clubCategory = navClubViewModel.selectedCategory
+    val clubCategoryItems by navClubViewModel.categoryClubs.observeAsState(emptyList())
+    if (clubCategory != null) {
+        navClubViewModel.getClubsByCategoryId(clubCategory)
+    }
     val clubItems by navClubViewModel.clubs.observeAsState(emptyList())
     var btn1IsChecked by remember {
         mutableStateOf(true)
@@ -46,6 +51,7 @@ fun CategoryClubScreen(navController: NavHostController, navClubViewModel: NavCl
     var btn2IsChecked by remember {
         mutableStateOf(true)
     }
+    val (centerClubs, majorClubs) = classifyClubs(clubCategoryItems)
     Column (
         modifier = Modifier
             .fillMaxSize()
@@ -79,11 +85,11 @@ fun CategoryClubScreen(navController: NavHostController, navClubViewModel: NavCl
 
         Spacer(modifier = Modifier
             .fillMaxWidth()
-            .padding(start = 20.dp, end = 20.dp)
+            .padding(start = 20.dp, end = 20.dp, )
             .height(1.dp)
             .border(10.dp, Color.Black))
         //중앙동아리 or 과동아리 분류별로 clubItems 보내면 ok
-        if(btn1IsChecked) ClubList(clubItems = clubItems, navController = navController,navUserViewModel,navClubViewModel)
+        if(btn1IsChecked) ClubList(clubItems = centerClubs, navController = navController,navUserViewModel,navClubViewModel)
 
         Row(
             modifier = Modifier
@@ -110,7 +116,20 @@ fun CategoryClubScreen(navController: NavHostController, navClubViewModel: NavCl
             .height(1.dp)
             .border(10.dp, Color.Black))
         //중앙동아리 or 과동아리 분류별로 clubItems 보내면 ok
-        if(btn2IsChecked) ClubList(clubItems = clubItems, navController = navController,navUserViewModel,navClubViewModel)
+        if(btn2IsChecked) ClubList(clubItems = majorClubs, navController = navController,navUserViewModel,navClubViewModel)
 
     }
+}
+fun classifyClubs(clubCategoryItems: List<Clubs>): Pair<List<Clubs>, List<Clubs>> {
+    val centerClubs = mutableListOf<Clubs>()
+    val majorClubs = mutableListOf<Clubs>()
+
+    for (club in clubCategoryItems) {
+        when (club.clubClassification) {
+            "중앙 동아리" -> centerClubs.add(club)
+            "단과대 동아리" -> majorClubs.add(club)
+        }
+    }
+
+    return Pair(centerClubs, majorClubs)
 }
