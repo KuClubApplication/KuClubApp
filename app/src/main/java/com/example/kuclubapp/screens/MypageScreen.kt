@@ -31,6 +31,12 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -54,9 +60,10 @@ import com.example.kuclubapp.viewmodel.NavUserViewModel
 fun MypageScreen(navController: NavHostController, navUserViewModel: NavUserViewModel, navClubViewModel: NavClubViewModel) {
 
     val context = LocalContext.current
-
     Column (
-        modifier = Modifier.fillMaxSize().background(Color(0xFFD9FDE8).copy(alpha = 0.6f)),
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color(0xFFD9FDE8).copy(alpha = 0.6f)),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -103,11 +110,14 @@ fun MypageScreen(navController: NavHostController, navUserViewModel: NavUserView
             }
 
             val clubLikedList = navClubViewModel.clubLiked.value
-                if(clubLikedList == null || clubLikedList.size == 0) {
+            navClubViewModel.getAllLiked(userId)
+                if(clubLikedList == null) {
+                    noLikedClub(userId, navClubViewModel)
+                } else if(clubLikedList.size == 0) {
                     noLikedClub(userId, navClubViewModel)
                 }
                 else {
-                    likedClubUI(clubLikedList)
+                    likedClubUI(userId, clubLikedList, navController, navClubViewModel)
                 }
         }
     }
@@ -154,54 +164,83 @@ fun noLikedClub(userId:String, navClubViewModel:NavClubViewModel){
 }
 
 @Composable
-fun likedClubUI(clubLikedList:List<Clubs>) {
+fun likedClubUI(userId:String,  clubLikedList:List<Clubs>, navController: NavHostController,navClubViewModel: NavClubViewModel) {
+    val clubLikes by navClubViewModel.itemList.collectAsState(initial = emptyList())    // likeCount 받기 위해
+    navClubViewModel.getAllLikedByClub()
+    var isUserLiked by remember{
+        mutableStateOf(true)
+    }
     LazyColumn {
-        items(clubLikedList) {index ->
-            Row (
+
+        items(clubLikedList) { index ->
+            Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(5.dp)
                     .background(Color.White, RoundedCornerShape(10.dp))
                     .border(5.dp, Color.LightGray, RoundedCornerShape(10.dp))
-                    .height(100.dp),
+                    .height(100.dp)
+                    .clickable {
+                        navClubViewModel.selectedClub = index
+                        navController.navigate("ClubDetail")
+                    },
                 verticalAlignment = Alignment.CenterVertically
-            ){
-                Column (
+            ) {
+                Column(
                     modifier = Modifier
                         .align(Alignment.CenterVertically)
                         .width(250.dp),
                     verticalArrangement = Arrangement.Center,
 
-                ){
+                    ) {
                     Text(
                         text = index.clubClassification,
                         fontSize = 15.sp,
                         modifier = Modifier
-                            .padding(start = 15.dp, )
+                            .padding(start = 15.dp,)
                     )
                     Text(
                         text = index.clubName,
                         fontSize = 25.sp,
                         modifier = Modifier.padding(start = 15.dp, top = 10.dp, bottom = 10.dp)
-                        )
+                    )
                 }
-                Row (
-                    modifier = Modifier.fillMaxWidth().padding(end = 20.dp),
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(end = 20.dp),
                     horizontalArrangement = Arrangement.End,
                     verticalAlignment = Alignment.Bottom
-                ){
-                    Icon(
-                        imageVector = Icons.Default.Favorite,
-                        contentDescription = "Favorite Icon",
-                        tint = Color.Red,
-                        modifier = Modifier.size(32.dp) // 아이콘 크기 설정
-                    )
-                    Text(
-                        text = "Likes " + index.clubLikes,
-                        fontSize = 20.sp
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .align(Alignment.Bottom)
+                            .padding(bottom = 10.dp, end = 15.dp)
+                            .clickable {
+                                navClubViewModel.deleteLiked(userId, index.clubId)
+                                navClubViewModel.getAllLikedByClub()
+                                isUserLiked = !isUserLiked
+                            }
+                    ) {
+                        Icon(
+                            painter = painterResource(
+                                id = if (isUserLiked)R.drawable.icon_heart else R.drawable.ic_empty_heart
+                            ),
+                            contentDescription = null,
+                            tint = Color.Red,
+                            modifier = Modifier
+                                .size(30.dp)
+                                .padding(end = 4.dp)
                         )
-                }
+                        val likeCount = countLikes(index.clubId, clubLikes)
+                        Text(
+                            text = "$likeCount likes",
+                            color = Color.Black, fontSize = 22.sp, fontWeight = FontWeight.Bold,
+                            modifier = Modifier
+                        )
+                    }
 
+                }
             }
         }
     }

@@ -6,6 +6,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 
 class ClubCategoryDao(private val firebaseDB: FirebaseDatabase) {
+    // insert, delete 기능 만들어 놓았지만 필요 없을 것으로 판단됨
     suspend fun insertCategory(clubCategory:ClubCategory){
         var table = firebaseDB.getReference("KuclubDB/ClubCategory")
         var clubInfo = table.child(clubCategory.clubCategoryId.toString()).setValue(clubCategory)
@@ -17,7 +18,6 @@ class ClubCategoryDao(private val firebaseDB: FirebaseDatabase) {
         var table = firebaseDB.getReference("KuclubDB/ClubCategory")
         table.orderByChild(category).equalTo(category).ref.removeValue()
     }
-
     suspend fun getAllCategory(onResult: (List<ClubCategory>) -> Unit) {
         val categorys = mutableListOf<ClubCategory>()
         val table = firebaseDB.getReference("KuclubDB/ClubCategory")

@@ -133,7 +133,7 @@ fun ClubInfoSection(clubDetails: Clubs,navController: NavHostController) {
                     modifier = Modifier.padding(start = 20.dp, top = 20.dp)
                 )
                 Text(
-                    text = clubDetails.clubCategory,
+                    text = clubDetails.clubClassification,
                     color = Color.Gray,
                     fontSize = 13.sp,
                     fontWeight = FontWeight.Bold,

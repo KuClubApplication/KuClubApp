@@ -7,6 +7,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 
 class ClubsDao(private val firebaseDB: FirebaseDatabase) {
+    // 여기도 insert, delete 있지만 사용하지 않을 예정
     suspend fun insertClub(club: Clubs){
         var table = firebaseDB.getReference("KuclubDB/Clubs")
         var clubInfo = table.child(club.clubId.toString())
