@@ -44,6 +44,7 @@ import com.example.kuclubapp.NavRoutes
 import com.example.kuclubapp.R
 import com.example.kuclubapp.viewmodel.NavUserViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import kotlinx.coroutines.launch
 
@@ -55,15 +56,18 @@ fun SettingScreen(navController: NavController, navUserViewModel: NavUserViewMod
         permission = android.Manifest.permission.POST_NOTIFICATIONS)
 
     var notificationsEnabled by remember { mutableStateOf(checkNotificationChannelStatus(context)) }
+    var alarmEnabled by remember { mutableStateOf(permissionState.status.isGranted) }
 
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult()
     ) {
         notificationsEnabled = checkNotificationChannelStatus(context)
+        alarmEnabled = permissionState.status.isGranted
     }
 
     LaunchedEffect(Unit) {
         notificationsEnabled = checkNotificationChannelStatus(context)
+        alarmEnabled = permissionState.status.isGranted
     }
 
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -71,6 +75,7 @@ fun SettingScreen(navController: NavController, navUserViewModel: NavUserViewMod
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_RESUME) {
                 notificationsEnabled = checkNotificationChannelStatus(context)
+                alarmEnabled = permissionState.status.isGranted
             }
         }
         lifecycleOwner.lifecycle.addObserver(observer)
@@ -82,7 +87,7 @@ fun SettingScreen(navController: NavController, navUserViewModel: NavUserViewMod
     Column(
         modifier = Modifier.fillMaxSize().background(Color(0xFFD9FDE8).copy(alpha = 0.6f))
     ) {
-        NotificationSettings(notificationsEnabled) {
+        NotificationSettings(notificationsEnabled, alarmEnabled) {
             val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).apply {
                 putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
                 putExtra(Settings.EXTRA_CHANNEL_ID, "Notice_Notification")
@@ -110,6 +115,7 @@ fun checkNotificationChannelStatus(context: Context): Boolean {
 @Composable
 fun NotificationSettings(
     notificationsEnabled: Boolean,
+    alarmEnabled: Boolean,
     onClick: () -> Unit
 ) {
     Column(modifier = Modifier
@@ -149,9 +155,9 @@ fun NotificationSettings(
             )
             Spacer(modifier = Modifier.weight(1f))
             Text(
-                text = if (notificationsEnabled) "ON" else "OFF",
+                text = if (notificationsEnabled && alarmEnabled) "ON" else "OFF",
                 fontWeight = FontWeight.Bold,
-                color = if (notificationsEnabled) Color(0xFF008000) else Color.Red,
+                color = if (notificationsEnabled && alarmEnabled) Color(0xFF008000) else Color.Red,
                 modifier = Modifier.padding(horizontal = 16.dp)
             )
         }
