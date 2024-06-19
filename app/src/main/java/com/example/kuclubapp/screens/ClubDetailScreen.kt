@@ -81,10 +81,10 @@ fun ClubDetailScreen(navController: NavHostController,navClubViewModel: NavClubV
                     )
                 }
                 if (clubDetails != null) {
-                    Text(text = clubDetails.clubCategoryId,  color = Color.Gray, fontSize = 16.sp,fontWeight = FontWeight.Bold)
+                    Text(text = clubDetails.clubCategory,  color = Color.Gray, fontSize = 16.sp,fontWeight = FontWeight.Bold)
                 }
                 if (clubDetails != null) {
-                    Text(text = clubDetails.clubCategory,  color = Color.Gray,fontSize = 16.sp,fontWeight = FontWeight.Bold)
+                    Text(text = clubDetails.clubClassification,  color = Color.Gray,fontSize = 16.sp,fontWeight = FontWeight.Bold)
                 }
             }
         }
