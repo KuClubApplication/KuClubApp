@@ -1,12 +1,10 @@
 package com.example.kuclubapp.screens
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -15,25 +13,17 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.FavoriteBorder
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -41,16 +31,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.example.kuclubapp.NavRoutes
+import coil.compose.AsyncImage
 import com.example.kuclubapp.R
 import com.example.kuclubapp.firebaseDB.Clubs
 import com.example.kuclubapp.viewmodel.NavClubViewModel
@@ -176,45 +164,57 @@ fun likedClubUI(userId:String,  clubLikedList:List<Clubs>, navController: NavHos
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(5.dp)
+                    .padding(top = 15.dp, start = 22.dp,end = 20.dp)
                     .background(Color.White, RoundedCornerShape(10.dp))
-                    .border(5.dp, Color.LightGray, RoundedCornerShape(10.dp))
+                    .border(2.dp, Color(0xFFD0CCCC), shape = RoundedCornerShape(20.dp))
+                    .clip(RoundedCornerShape(20.dp))
                     .height(100.dp)
                     .clickable {
                         navClubViewModel.selectedClub = index
                         navController.navigate("ClubDetail")
                     },
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.Bottom
             ) {
+                val defaultImageUrl = "https://firebasestorage.googleapis.com/v0/b/ku-club-management.appspot.com/o/koo.png?alt=media&token=50ed63cd-8588-46e1-9189-830dfd09ce19"
+
+                AsyncImage(
+                    model = if (index.clubImgUrl.isNullOrEmpty()) defaultImageUrl else index.clubImgUrl,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(78.dp)
+                        .padding(12.dp)
+                        .clip(RoundedCornerShape(200.dp))
+                        .align(Alignment.CenterVertically),
+                    contentScale = ContentScale.Crop
+                )
                 Column(
                     modifier = Modifier
-                        .align(Alignment.CenterVertically)
-                        .width(250.dp),
+                        .weight(1f)
+                        .align(Alignment.CenterVertically),
                     verticalArrangement = Arrangement.Center,
 
                     ) {
                     Text(
                         text = index.clubClassification,
-                        fontSize = 15.sp,
+                        fontSize = 16.sp,
                         modifier = Modifier
-                            .padding(start = 15.dp,)
+                            .padding(start = 15.dp),
+                        color = Color.Gray
                     )
                     Text(
                         text = index.clubName,
-                        fontSize = 25.sp,
-                        modifier = Modifier.padding(start = 15.dp, top = 10.dp, bottom = 10.dp)
+                        fontSize = 20.sp,
+                        modifier = Modifier.padding(start = 15.dp, top = 4.dp, bottom = 10.dp)
                     )
                 }
                 Row(
                     modifier = Modifier
-                        .fillMaxWidth()
                         .padding(end = 20.dp),
                     horizontalArrangement = Arrangement.End,
                     verticalAlignment = Alignment.Bottom
                 ) {
                     Row(
                         modifier = Modifier
-                            .align(Alignment.Bottom)
                             .padding(bottom = 10.dp, end = 15.dp)
                             .clickable {
                                 navClubViewModel.deleteLiked(userId, index.clubId)
@@ -229,13 +229,13 @@ fun likedClubUI(userId:String,  clubLikedList:List<Clubs>, navController: NavHos
                             contentDescription = null,
                             tint = Color.Red,
                             modifier = Modifier
-                                .size(30.dp)
+                                .size(24.dp)
                                 .padding(end = 4.dp)
                         )
                         val likeCount = countLikes(index.clubId, clubLikes)
                         Text(
                             text = "$likeCount likes",
-                            color = Color.Black, fontSize = 22.sp, fontWeight = FontWeight.Bold,
+                            color = Color.Black, fontSize = 14.sp, fontWeight = FontWeight.Bold,
                             modifier = Modifier
                         )
                     }
