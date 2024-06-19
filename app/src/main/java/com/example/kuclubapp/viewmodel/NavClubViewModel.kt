@@ -52,6 +52,11 @@ class NavClubViewModel(private val repository: ClubRepository): ViewModel() {
             repository.deleteClub(club)
         }
     }
+    fun updateClub(club: Clubs){
+        viewModelScope.launch {
+            repository.updateClub(club)
+        }
+    }
     fun searchById(userId: String){
         viewModelScope.launch {
             repository.searchbyClubId(userId){

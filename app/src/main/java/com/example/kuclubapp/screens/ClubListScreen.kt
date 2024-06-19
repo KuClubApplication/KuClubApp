@@ -145,10 +145,14 @@ fun ClubListItem(club: Clubs,topPadding: Dp,navController: NavHostController,nav
             modifier = Modifier.align(Alignment.Bottom).padding(bottom = 10.dp, end = 15.dp).clickable {
                 if(!isUserLiked){
                     navClubViewModel.insertLiked(userId,club.clubId)
+                    club.clubLikes = club.clubLikes?.plus(1)
+                    navClubViewModel.updateClub(club)
                     isUserLiked = true
                      }
                 else{
                     navClubViewModel.deleteLiked(userId,club.clubId)
+                    club.clubLikes = club.clubLikes?.minus(1)
+                    navClubViewModel.updateClub(club)
                     isUserLiked = false
                 }
             }
