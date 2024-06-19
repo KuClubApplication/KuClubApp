@@ -119,8 +119,10 @@ fun ClubListItem(club: Clubs,topPadding: Dp,navController: NavHostController,nav
                 navController.navigate("ClubDetail")
             }
     ) {
+        val defaultImageUrl = "https://firebasestorage.googleapis.com/v0/b/ku-club-management.appspot.com/o/koo.png?alt=media&token=50ed63cd-8588-46e1-9189-830dfd09ce19"
+
         AsyncImage(
-            model = club.clubImgUrl,
+            model = if (club.clubImgUrl.isNullOrEmpty()) defaultImageUrl else club.clubImgUrl,
             contentDescription = null,
             modifier = Modifier
                 .size(78.dp)
@@ -143,10 +145,14 @@ fun ClubListItem(club: Clubs,topPadding: Dp,navController: NavHostController,nav
             modifier = Modifier.align(Alignment.Bottom).padding(bottom = 10.dp, end = 15.dp).clickable {
                 if(!isUserLiked){
                     navClubViewModel.insertLiked(userId,club.clubId)
+                    club.clubLikes = club.clubLikes?.plus(1)
+                    navClubViewModel.updateClub(club)
                     isUserLiked = true
                 }
                 else{
                     navClubViewModel.deleteLiked(userId,club.clubId)
+                    club.clubLikes = club.clubLikes?.minus(1)
+                    navClubViewModel.updateClub(club)
                     isUserLiked = false
                 }
             }

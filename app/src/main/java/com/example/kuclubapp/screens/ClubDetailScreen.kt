@@ -9,6 +9,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.activity.ComponentActivity
@@ -70,8 +71,10 @@ fun ClubDetailScreen(navController: NavHostController,navClubViewModel: NavClubV
                     Text(text = clubDetails.clubName, fontWeight = FontWeight.ExtraBold, fontSize = 27.sp,modifier = Modifier.padding(top = 15.dp))
                 }
                 if (clubDetails != null) {
+                    val defaultImageUrl = "https://firebasestorage.googleapis.com/v0/b/ku-club-management.appspot.com/o/koo.png?alt=media&token=50ed63cd-8588-46e1-9189-830dfd09ce19"
+
                     AsyncImage(
-                        model = clubDetails.clubImgUrl,
+                        model = if (clubDetails.clubImgUrl.isNullOrEmpty()) defaultImageUrl else clubDetails.clubImgUrl,
                         contentDescription = null,
                         modifier = Modifier
                             .size(78.dp)
@@ -143,17 +146,20 @@ fun ClubInfoSection(clubDetails: Clubs,navController: NavHostController) {
             Row(modifier = Modifier
                 .padding(end = 20.dp)
                 .align(Alignment.CenterVertically)) {
-                Icon(
-                    painter = painterResource(id = R.drawable.icon_instagram),
-                    contentDescription = null,
-                    tint = Color.Unspecified,
-                    modifier = Modifier
-                        .size(32.dp)
-                        .padding(top = 8.dp)
-                        .align(Alignment.CenterVertically).clickable {
-                            navController.navigate("webView")
-                        }
-                )
+                clubDetails.clubInsta?.let { Log.d("테스트", it) }
+                if(clubDetails.clubInsta != null) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.icon_instagram),
+                        contentDescription = null,
+                        tint = Color.Unspecified,
+                        modifier = Modifier
+                            .size(32.dp)
+                            .padding(top = 8.dp)
+                            .align(Alignment.CenterVertically).clickable {
+                                navController.navigate("webView")
+                            }
+                    )
+                }
             }
 
 

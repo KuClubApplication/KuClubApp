@@ -24,6 +24,10 @@ class ClubsDao(private val firebaseDB: FirebaseDatabase) {
         var table = firebaseDB.getReference("KuclubDB/Clubs")
         table.orderByChild("clubName").equalTo(clubName).ref.removeValue()
     }
+    suspend fun updateClub(club: Clubs){
+        var table = firebaseDB.getReference("KuclubDB/Clubs")
+        table.child(club.clubId.toString()).child("clubLikes").setValue(club.clubLikes)
+    }
 
     suspend fun searchbyClubName(clubName:String, onResult: (List<Clubs>) -> Unit){
         val clubs = mutableListOf<Clubs>()
@@ -74,6 +78,7 @@ class ClubsDao(private val firebaseDB: FirebaseDatabase) {
                     val club = clubsSnapshot.getValue(Clubs::class.java)
                     club?.let { clubs.add(it) }
                 }
+                clubs.sortByDescending { it.clubLikes }
                 onResult(clubs)
             }
 
