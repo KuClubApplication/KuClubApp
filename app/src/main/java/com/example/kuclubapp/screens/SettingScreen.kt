@@ -1,6 +1,9 @@
 package com.example.kuclubapp.screens
 
+import android.app.NotificationManager
+import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.provider.Settings
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -41,7 +44,6 @@ import com.example.kuclubapp.NavRoutes
 import com.example.kuclubapp.R
 import com.example.kuclubapp.viewmodel.NavUserViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import kotlinx.coroutines.launch
 
@@ -51,27 +53,24 @@ fun SettingScreen(navController: NavController, navUserViewModel: NavUserViewMod
     val context = LocalContext.current
     val permissionState = rememberPermissionState(
         permission = android.Manifest.permission.POST_NOTIFICATIONS)
-    var notificationsEnabled by remember { mutableStateOf(permissionState.status.isGranted) }
+
+    var notificationsEnabled by remember { mutableStateOf(checkNotificationChannelStatus(context)) }
 
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult()
     ) {
-        notificationsEnabled = permissionState.status.isGranted
+        notificationsEnabled = checkNotificationChannelStatus(context)
     }
 
-    LaunchedEffect(permissionState.status.isGranted) {
-        notificationsEnabled = permissionState.status.isGranted
+    LaunchedEffect(Unit) {
+        notificationsEnabled = checkNotificationChannelStatus(context)
     }
 
     val lifecycleOwner = LocalLifecycleOwner.current
     DisposableEffect(lifecycleOwner) {
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_RESUME) {
-                notificationsEnabled = permissionState.status.isGranted
-
-//                if (!isGranted) {
-//                    (context as? Activity)?.finish()
-//                }
+                notificationsEnabled = checkNotificationChannelStatus(context)
             }
         }
         lifecycleOwner.lifecycle.addObserver(observer)
@@ -86,8 +85,8 @@ fun SettingScreen(navController: NavController, navUserViewModel: NavUserViewMod
         NotificationSettings(notificationsEnabled) {
             val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).apply {
                 putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
+                putExtra(Settings.EXTRA_CHANNEL_ID, "Notice_Notification")
             }
-//            context.startActivity(intent)
             launcher.launch(intent)
         }
         Spacer(modifier = Modifier.padding(vertical = 5.dp))
@@ -97,6 +96,15 @@ fun SettingScreen(navController: NavController, navUserViewModel: NavUserViewMod
 
         Spacer(modifier = Modifier.padding(vertical = 50.dp))
     }
+}
+
+fun checkNotificationChannelStatus(context: Context): Boolean {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val channel = manager.getNotificationChannel("Notice_Notification")
+        return channel?.importance != NotificationManager.IMPORTANCE_NONE
+    }
+    return true
 }
 
 @Composable
@@ -130,10 +138,10 @@ fun NotificationSettings(
                     )
                 }
                 // 임시 코드 사용 안 하는 경우 아래 코드의 주석 해제해야 됨.
-//                .clickable { onClick() }
+                .clickable { onClick() }
                 // 알림 수신 권한 On -> Off로 변경시 강제 프로세스 종료 문제 발생.
                 // 임시로, 현재 권한 허용 상태가 True인 경우 알림 설정 바가 클릭 안 되게 막음.
-                .then(if (!notificationsEnabled) Modifier.clickable { onClick() } else Modifier)
+//                .then(if (!notificationsEnabled) Modifier.clickable { onClick() } else Modifier)
         ) {
             Text(
                 text = "알림 수신 동의",
