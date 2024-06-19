@@ -56,6 +56,7 @@ fun NoticeDetailScreen(noticeNum: Int?, navController: NavHostController,
                     NoticeItem("번호", noticeNum.toString())
                     NoticeItem("제목", it.noticeTitle)
                     NoticeItem("날짜", it.noticeDt)
+                    NoticeItem("동아리", it.clubName)
                     NoticeItem("내용", it.noticeContent)
                 }
             }
