@@ -11,6 +11,11 @@ class NoticeRepository(private val firebaseDB: FirebaseDatabase) {
     suspend fun insertNotice(notice: Notice, context: Context){
         noticeDao.insertNotice(notice, context)
     }
+
+    suspend fun monitorNewNotices(context: Context) {
+        noticeDao.monitorNewNotices(context)
+    }
+
     suspend fun deleteNotice(notice: Notice){
         noticeDao.deleteNotice(notice)
     }

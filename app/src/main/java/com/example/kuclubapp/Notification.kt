@@ -24,7 +24,7 @@ fun createNotificationChannel(context: Context) {
     }
 }
 
-fun sendNoticeNotification(context: Context, msg: String) {
+fun sendNoticeNotification(context: Context, clubName: String, msg: String) {
     val channelId = "Notice_Notification"
     val notificationId = 1
 
@@ -35,7 +35,7 @@ fun sendNoticeNotification(context: Context, msg: String) {
 
     val notification = NotificationCompat.Builder(context, channelId)
         .setContentTitle("공지사항 알림")
-        .setContentText(msg)
+        .setContentText("[$clubName] $msg")
         .setPriority(NotificationCompat.PRIORITY_HIGH)
         .setContentIntent(pendingIntent)
         .setAutoCancel(true)
