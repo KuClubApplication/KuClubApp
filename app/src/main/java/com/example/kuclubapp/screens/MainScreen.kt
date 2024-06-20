@@ -2,7 +2,6 @@ package com.example.kuclubapp.screens
 
 import CategoryScreen
 import android.Manifest
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -140,9 +139,6 @@ fun MainScreen(navController: NavHostController, navUserViewModel: NavUserViewMo
                         NoticeDetailScreen(noticeNum, navController, navUserViewModel, navNoticeViewModel)
                     }
 
-                    composable(NavRoutes.Alarm.route) {
-                        AlarmScreen(navController, navUserViewModel)
-                    }
                     composable(route = NavRoutes.ClubDetail.route) {
                         ClubDetailScreen(navController,navClubViewModel)
                     }

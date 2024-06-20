@@ -2,15 +2,15 @@ package com.example.kuclubapp.screens
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -53,7 +53,6 @@ fun TopBar(navController: NavHostController) {
                             NavRoutes.Contact.route -> "고객 문의"
                             NavRoutes.NoticeList.route -> "공지사항"
                             NavRoutes.NoticeDetail.route -> "상세 공지사항"
-                            NavRoutes.Alarm.route -> "알림"
                             NavRoutes.ClubDetail.route -> "상세 페이지"
                             NavRoutes.CategoryClubList.route -> "카테고리 동아리"
                             else -> "App"
@@ -74,12 +73,7 @@ fun TopBar(navController: NavHostController) {
                 }
             },
             actions = {
-                IconButton(onClick = { navController.navigate(NavRoutes.Alarm.route) }) {
-                    Icon(
-                        imageVector = Icons.Default.Notifications,
-                        contentDescription = "Notifications"
-                    )
-                }
+                Spacer(modifier = Modifier.padding(12.dp))
             },
             colors = TopAppBarDefaults.topAppBarColors(
                 containerColor = Color.White, // 배경색을 흰색으로 설정
