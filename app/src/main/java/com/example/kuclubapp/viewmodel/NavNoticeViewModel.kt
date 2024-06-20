@@ -30,6 +30,13 @@ class NavNoticeViewModel(private val repository: NoticeRepository): ViewModel() 
             repository.insertNotice(notice, context)
         }
     }
+
+    fun monitorNewNotices(context: Context) {
+        viewModelScope.launch {
+            repository.monitorNewNotices(context)
+        }
+    }
+
     fun deleteNotice(notice: Notice){
         viewModelScope.launch {
             repository.deleteNotice(notice)

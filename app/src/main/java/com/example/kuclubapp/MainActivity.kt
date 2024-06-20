@@ -57,6 +57,7 @@ class MainActivity : ComponentActivity() {
 
             // 공지사항 notification 생성
             createNotificationChannel(this)
+            noticeViewModel.monitorNewNotices(context)
 
             LaunchedEffect(tokenFlow.value) {
                 tokenFlow.value?.let { token ->
