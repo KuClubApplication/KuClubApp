@@ -155,7 +155,7 @@ fun noLikedClub(userId:String, navClubViewModel:NavClubViewModel){
 fun likedClubUI(userId:String,  clubLikedList:List<Clubs>, navController: NavHostController,navClubViewModel: NavClubViewModel) {
     val clubLikes by navClubViewModel.itemList.collectAsState(initial = emptyList())    // likeCount 받기 위해
     navClubViewModel.getAllLikedByClub()
-    var isUserLiked by remember{
+    var isUserLiked by remember{    // 추후 필요에 따라 사용 예정
         mutableStateOf(true)
     }
     LazyColumn {
@@ -216,11 +216,6 @@ fun likedClubUI(userId:String,  clubLikedList:List<Clubs>, navController: NavHos
                     Row(
                         modifier = Modifier
                             .padding(bottom = 10.dp, end = 15.dp)
-                            .clickable {
-                                navClubViewModel.deleteLiked(userId, index.clubId)
-                                navClubViewModel.getAllLikedByClub()
-                                isUserLiked = !isUserLiked
-                            }
                     ) {
                         Icon(
                             painter = painterResource(
