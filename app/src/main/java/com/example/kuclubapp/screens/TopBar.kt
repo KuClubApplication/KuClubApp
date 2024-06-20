@@ -1,9 +1,10 @@
 package com.example.kuclubapp.screens
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -73,7 +74,12 @@ fun TopBar(navController: NavHostController) {
                 }
             },
             actions = {
-                Spacer(modifier = Modifier.padding(12.dp))
+                Box(
+                    modifier = Modifier
+                        .padding(20.dp)
+                        .height(24.dp)
+                        .background(Color.Black)
+                )
             },
             colors = TopAppBarDefaults.topAppBarColors(
                 containerColor = Color.White, // 배경색을 흰색으로 설정
