@@ -44,26 +44,6 @@ fun NoticeListScreen(navController: NavHostController, navUserViewModel: NavUser
     navNoticeViewModel.notices.observeAsState().value?.let {
         notices = it
     }
-    Column {
-        // 새로운 공지사항 생성
-        val noticeId = notices.size+1
-        val notice = Notice(noticeId, "새로운 공지사항", "세부사항 없음", "내용 없음")
-        // 공지사항 생성 버튼
-        Button(
-            onClick = { navNoticeViewModel.insertNotice(notice, context) },
-            modifier = Modifier
-                .width(300.dp)
-                .height(80.dp)
-                .padding(10.dp),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFF0A3711),
-                contentColor = Color.White
-            ),
-            shape = MaterialTheme.shapes.medium
-        ) {
-            Text("새로운 공지사항 생성", fontSize = 25.sp)
-        }
-
         LazyColumn(
             modifier = Modifier.fillMaxSize()
         ) {
@@ -74,9 +54,6 @@ fun NoticeListScreen(navController: NavHostController, navUserViewModel: NavUser
             }
         }
     }
-
-}
-
 @Composable
 fun NoticeListItem(notice: Notice, onClick: () -> Unit) {
     Card(
