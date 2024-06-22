@@ -7,7 +7,7 @@
 ---  
 ### 기타 코드 설명
 - MainActivity : 자동로그인 여부 및 JWT 유무에 따라 진입점 다르게 설정.
-- UserDao : Realtime database 액세스 하도록 수정함. / 혹시 몰라서 Datastore 액세스 코드 주석 처리 해놓음. Firestore 안 쓰는 거 확정이면 지울 예정.
+- UserDao : Realtime database 액세스 하도록 수정함.
 - retrofitclass.kt & apiinterface.kt : express 서버와 통신하기 위한 네트워크 연결 및 API 인터페이스.
 - datastore.kt : 자동로그인 체크 여부와 JWT를 로컬 Datastore에 저장 
 - GMailSender : SMTP 프로토콜로 인증번호 메일 전송
